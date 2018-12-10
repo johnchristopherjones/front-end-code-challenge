@@ -1,7 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { LocationPageComponent } from './components/location-page/location-page.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: 'locations',
+    component: LocationPageComponent
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

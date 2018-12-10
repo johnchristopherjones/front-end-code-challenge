@@ -1,0 +1,79 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+// Full palettes generated with http://mcg.mbitson.com/
+// Primary: #253544
+// Accent: #e74c3c
+
+$roomeky-primary-palette: (
+    50 : #e5e7e9,
+    100 : #bec2c7,
+    200 : #929aa2,
+    300 : #66727c,
+    400 : #465360,
+    500 : #253544,
+    600 : #21303e,
+    700 : #1b2835,
+    800 : #16222d,
+    900 : #0d161f,
+    A100 : #60a9ff,
+    A200 : #2d8eff,
+    A400 : #0073f9,
+    A700 : #0067e0,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+$roomkey-accent-palette: (
+    50 : #fceae8,
+    100 : #f8c9c5,
+    200 : #f3a69e,
+    300 : #ee8277,
+    400 : #eb6759,
+    500 : #e74c3c,
+    600 : #e44536,
+    700 : #e03c2e,
+    800 : #dd3327,
+    900 : #d7241a,
+    A100 : #ffffff,
+    A200 : #ffd9d7,
+    A400 : #ffa8a4,
+    A700 : #ff8f8b,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$roomkey-app-primary: mat-palette($roomeky-primary-palette);
+$roomkey-app-accent: mat-palette($roomkey-accent-palette, A200, A100, A400);
+$roomkey-app-warn: mat-palette($mat-red);
+$roomkey-app-theme: mat-dark-theme($roomkey-app-primary, $roomkey-app-accent, $roomkey-app-warn);
+
+@include angular-material-theme($roomkey-app-theme);

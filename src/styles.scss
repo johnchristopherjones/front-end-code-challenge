@@ -1,3 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Hack the header-bar's search box styles */
+.header-search-bar {
+  .mat-form-field {
+    width: 480px;
+  }
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    padding-top: 0;
+    ::placeholder {
+      color: white;
+    }
+  }
+}
