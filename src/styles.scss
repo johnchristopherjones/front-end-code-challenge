@@ -2,15 +2,18 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-/* Hack the header-bar's search box styles */
-.header-search-bar {
-  .mat-form-field {
-    width: 480px;
+/* 
+ * Hack the header-bar's search box styles
+ * Angular allows us to encapsulate styles, but we need to dig deep into
+ * the Angular Material components to tweak them to look good in specific
+ * contexts, like "hero banners."
+ */
+.header-search-bar .mat-form-field-appearance-fill .mat-form-field-flex {
+  padding-top: 0;
+  ::placeholder {
+    color: white;
   }
-  .mat-form-field-appearance-fill .mat-form-field-flex {
-    padding-top: 0;
-    ::placeholder {
-      color: white;
-    }
+  .mat-form-field-suffix {
+    align-self: center;
   }
 }

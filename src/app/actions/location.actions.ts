@@ -12,7 +12,9 @@ export enum LocationActionTypes {
   UpdateLocations = '[Location] Update Locations',
   DeleteLocation = '[Location] Delete Location',
   DeleteLocations = '[Location] Delete Locations',
-  ClearLocations = '[Location] Clear Locations'
+  ClearLocations = '[Location] Clear Locations',
+  SearchLocations = '[Location] Search Locations',
+  SelectLocation = '[Location] Select Location'
 }
 
 export class LoadLocations implements Action {
@@ -73,6 +75,18 @@ export class ClearLocations implements Action {
   readonly type = LocationActionTypes.ClearLocations;
 }
 
+export class SearchLocations implements Action {
+  readonly type = LocationActionTypes.SearchLocations;
+
+  constructor(public payload: { searchTerm: string }) {}
+}
+
+export class SelectLocation implements Action {
+  readonly type = LocationActionTypes.SelectLocation;
+
+  constructor(public payload: { id: string }) {}
+}
+
 export type LocationActions =
  LoadLocations
  | AddLocation
@@ -83,4 +97,6 @@ export type LocationActions =
  | UpdateLocations
  | DeleteLocation
  | DeleteLocations
- | ClearLocations;
+ | ClearLocations
+ | SearchLocations
+ | SelectLocation;

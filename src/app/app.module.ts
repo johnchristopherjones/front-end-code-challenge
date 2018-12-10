@@ -27,15 +27,21 @@ import {
   MatFormFieldModule,
   MatNativeDateModule,
   MatDatepickerModule,
-  MatInputModule
+  MatInputModule,
+  MatAutocompleteModule
 } from '@angular/material';
 import { LocationPageComponent } from './components/location-page/location-page.component';
+import { LocationSearchBoxComponent } from './components/location-search-box/location-search-box.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavigationComponent,
     LocationPageComponent,
+    LocationSearchBoxComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -45,6 +51,7 @@ import { LocationPageComponent } from './components/location-page/location-page.
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([AppEffects]),
     LayoutModule,
+    FlexLayoutModule,
     MatToolbarModule,
     MatButtonModule,
     MatSidenavModule,
@@ -59,7 +66,10 @@ import { LocationPageComponent } from './components/location-page/location-page.
     MatFormFieldModule,
     MatNativeDateModule,
     MatDatepickerModule,
-    MatInputModule
+    MatInputModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    MatAutocompleteModule
   ],
   providers: [],
   bootstrap: [AppComponent]

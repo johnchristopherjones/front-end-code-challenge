@@ -17,7 +17,21 @@
 }
 
 .header-logo-bar {
-  $logo-height: 88px;
-  $padding: 48px;
+  $logo-height: 46px;
+  $padding: 30px;
   height: $logo-height + $padding;
+  font-size: 22px;
+  img {
+    height: 38px;
+    margin-right: 20px;
+  }
+}
+
+.header-search-bar {
+  height: 88px;
+  display: flex;
+  flex-direction: row;
+  app-location-search-box {
+    flex-basis: 100%;
+  }
 }

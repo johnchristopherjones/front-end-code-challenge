@@ -1,0 +1,12 @@
+$margin: 16px;
+
+.mat-form-field {
+  width: 360px;
+  flex-grow: 1;
+}
+
+mat-form-field + mat-form-field {
+  margin-left: $margin;
+  flex-grow: 0;
+  width: 180px;
+}

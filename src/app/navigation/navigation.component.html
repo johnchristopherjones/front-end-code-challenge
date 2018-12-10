@@ -14,11 +14,10 @@
   <mat-sidenav-content>
     <mat-toolbar color="primary" class="header-logo-bar">
       <img src="/assets/logo-roomkey-white.svg" class="logo">
+      Unlock a lower rate
     </mat-toolbar>
     <mat-toolbar color="primary" class="header-search-bar">
-      <mat-form-field appearance="fill" floatLabel="always">
-        <input matInput placeholder="Enter a city, airport, or zip code">
-      </mat-form-field>
+      <app-location-search-box></app-location-search-box>
     </mat-toolbar>
     <ng-content></ng-content>
   </mat-sidenav-content>

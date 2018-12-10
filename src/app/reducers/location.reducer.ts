@@ -4,12 +4,14 @@ import { LocationActions, LocationActionTypes } from '../actions/location.action
 
 export interface State extends EntityState<Location> {
   // additional entities state properties
+  selectedLocation: string;
 }
 
 export const adapter: EntityAdapter<Location> = createEntityAdapter<Location>();
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
+  selectedLocation: null
 });
 
 export function reducer(
