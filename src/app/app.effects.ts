@@ -10,22 +10,22 @@ import { of } from 'rxjs';
 
 @Injectable()
 export class AppEffects {
-  DEBOUNCE_TIME = 200 /* ms */;
 
   /**
    * Request location autofill choices from the API server.
    */
-  @Effect() SearchLocations$ = this.actions$.pipe(
+  @Effect()
+  searchLocations$ = ({ debounce = 200 /*ms*/ } = {}) => this.actions$.pipe(
     // Listen to SearchLoaction actions
     ofType<SearchLocations>(LocationActionTypes.SearchLocations),
     // But wait until the events stop coming in for a little bit
-    debounceTime(this.DEBOUNCE_TIME),
+    debounceTime(debounce),
     // Hit the API with that search query
     switchMap(({ payload: { searchTerm } }) => this.api.autofill(searchTerm).pipe(
       // Handle errors (kinda)
       catchError(err => {
         console.log(err);
-        return of({ searchTerm, locations: [], airports: []});
+        return of({ searchTerm, locations: [], airports: [] });
       })
     )),
     // Split response into load actions for each store
@@ -33,7 +33,7 @@ export class AppEffects {
       new LoadAutofillLocations({ autofillLocations }),
       new LoadAutofillAirports({ autofillAirports })
     ]),
-  );
+  )
 
-  constructor(private actions$: Actions, private api: RoomkeyApiService) {}
+  constructor(private actions$: Actions, private api: RoomkeyApiService) { }
 }
