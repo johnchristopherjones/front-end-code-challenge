@@ -4,6 +4,11 @@ import { LocationPageComponent } from './components/location-page/location-page.
 
 const routes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'locations'
+  },
+  {
     path: 'locations',
     component: LocationPageComponent
   }
