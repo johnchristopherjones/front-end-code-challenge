@@ -1,15 +1,20 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Hotel } from '../models/hotel.model';
 import { HotelActions, HotelActionTypes } from '../actions/hotel.actions';
+import { HotelMetadata } from '../models/hotel-metadata.model';
 
 export interface State extends EntityState<Hotel> {
   // additional entities state properties
+  metadata: HotelMetadata;
 }
 
-export const adapter: EntityAdapter<Hotel> = createEntityAdapter<Hotel>();
+export const adapter: EntityAdapter<Hotel> = createEntityAdapter<Hotel>({
+  selectId: hotel => hotel.udicode
+});
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
+  metadata: null
 });
 
 export function reducer(
@@ -50,7 +55,8 @@ export function reducer(
     }
 
     case HotelActionTypes.LoadHotels: {
-      return adapter.addAll(action.payload.hotels, state);
+      const { metadata } = action.payload;
+      return adapter.addAll(action.payload.hotels, { ...state, metadata });
     }
 
     case HotelActionTypes.ClearHotels: {

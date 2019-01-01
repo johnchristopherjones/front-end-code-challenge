@@ -30,6 +30,7 @@ export interface Hotel {
     description: string;
   };
   booking_phone_number: string;
+  country_code: string;
   address: {
     line1: string;
     line2: string;

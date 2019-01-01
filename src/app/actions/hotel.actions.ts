@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { Update } from '@ngrx/entity';
 import { Hotel } from '../models/hotel.model';
+import { HotelMetadata } from '../models/hotel-metadata.model';
 
 export enum HotelActionTypes {
   LoadHotels = '[Hotel] Load Hotels',
@@ -18,7 +19,7 @@ export enum HotelActionTypes {
 export class LoadHotels implements Action {
   readonly type = HotelActionTypes.LoadHotels;
 
-  constructor(public payload: { hotels: Hotel[] }) {}
+  constructor(public payload: { hotels: Hotel[], metadata: HotelMetadata }) {}
 }
 
 export class AddHotel implements Action {

@@ -5,9 +5,12 @@ import { Observable } from 'rxjs';
 import { AutofillAirport } from '../models/autofill-airport.model';
 import { AutofillLocation } from '../models/autofill-location.model';
 import { Location } from '../models/location.model';
+import { Hotel } from '../models/hotel.model';
+import { HotelMetadata } from '../models/hotel-metadata.model';
 
 export const AUTOFILL_URI = `${environment.API}/autofill`;
 export const locationUri = (id: string) => `${environment.API}/locations/${id}`;
+export const hotelsUri = (id: string) => `${environment.API}/locations/${id}/hotels`;
 
 interface AutofillResponse {
   query: string;
@@ -22,6 +25,15 @@ const defaultLocationFields: (keyof Location)[] = [
   'name', 'country_code', 'country_name', 'full_name', 'geometry'
 ];
 
+interface HotelResponse {
+  data: Hotel[];
+  metadata: HotelMetadata;
+}
+
+const defaultHotelFields: (keyof Hotel)[] = [
+  'address', 'brand', 'country_code', 'lat', 'lng', 'name',
+  'primary_photo', 'udicode', 'user_rating'
+];
 
 
 /**
@@ -51,5 +63,16 @@ export class RoomkeyApiService {
     return this.http.get<LocationResponse>(locationUri(id), { params: { 'fields[]': fields }, });
   }
 
+  /** Get hotels at location */
+  hotels(id: string, ...fields: (keyof Hotel)[]): Observable<HotelResponse> {
+    fields = fields.length === 0 ? defaultHotelFields : fields;
+    const params = {
+      'fields[]': fields,
+      limit: '401',
+      metadata: 'true',
+      offset: '0',
+      sort: 'distance-asc'
+    };
+    return this.http.get<HotelResponse>(hotelsUri(id), { params });
   }
 }

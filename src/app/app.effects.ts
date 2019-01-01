@@ -5,6 +5,7 @@ import { catchError, debounceTime, filter, flatMap, map, switchMap, tap } from '
 import { LoadAutofillAirports } from './actions/autofill-airport.actions';
 import { LoadAutofillLocations } from './actions/autofill-location.actions';
 import { ApiResponseError, CoreActionTypes } from './actions/core.actions';
+import { LoadHotels } from './actions/hotel.actions';
 import { LoadLocations, LocationActionTypes, SearchLocations, SelectLocation } from './actions/location.actions';
 import { RoomkeyApiService } from './services/roomkey-api.service';
 
@@ -57,6 +58,21 @@ export class AppEffects {
     )),
   )
 
+  /**
+   * Request hotels for the selected location
+   *
+   * NOTE: we could combine searchHotels and selectLocation into a single effect
+   * that makes two HTTP requests, but splitting up the effects and hanging them
+   * off the same action makes any error-handling logic simpler to follow.
+   */
+  @Effect()
+  searchHotels$ = ({ debounce = 200 /*ms*/ } = {}) => this.actions$.pipe(
+    ofType<SelectLocation>(LocationActionTypes.SelectLocation),
+    debounceTime(debounce),
+    switchMap(({ payload: { id } }) => this.api.hotels(id).pipe(
+      map(({ data: hotels, metadata }) => new LoadHotels({ hotels, metadata })),
+      catchError(error => of(new ApiResponseError({ error })))
+    ))
   )
 
   constructor(private actions$: Actions, private api: RoomkeyApiService) { }
