@@ -70,12 +70,13 @@ export function reducer(
     }
 
     case LocationActionTypes.SelectLocation: {
-      return {
-        ...state,
-        selectedLocation: action.payload.id,
-        checkinDate: action.payload.checkinDate || state.checkinDate,
-        checkoutDate: action.payload.checkoutDate || state.checkoutDate
-      };
+      const { id: selectedLocation } = action.payload;
+      return { ...state, selectedLocation };
+    }
+
+    case LocationActionTypes.ChangeDates: {
+      const { checkinDate, checkoutDate } = action.payload;
+      return { ...state, checkinDate, checkoutDate };
     }
 
     default: {

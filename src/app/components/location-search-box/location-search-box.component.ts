@@ -3,14 +3,14 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { distinctUntilKeyChanged, takeUntil, combineLatest, map, withLatestFrom } from 'rxjs/operators';
-import { SearchLocations, SelectLocation } from 'src/app/actions/location.actions';
+import { first, takeUntil, tap } from 'rxjs/operators';
+import { SearchLocations, SelectLocation, ChangeDates } from 'src/app/actions/location.actions';
 import { AutofillAirport } from 'src/app/models/autofill-airport.model';
 import { AutofillLocation } from 'src/app/models/autofill-location.model';
 import { State } from 'src/app/reducers';
 import { getAllAutofillAirports } from 'src/app/reducers/autofill-airport.reducer';
 import { getAllAutofillLocations } from 'src/app/reducers/autofill-location.reducer';
-import { getCheckinoutDates } from 'src/app/reducers/location.reducer';
+import { getCheckinoutDates, getSelectedLocationId } from 'src/app/reducers/location.reducer';
 
 @Component({
   selector: 'app-location-search-box',
@@ -34,7 +34,7 @@ export class LocationSearchBoxComponent implements OnDestroy, OnInit {
     });
 
     // Initialize form with initial values from store
-    this.store.pipe(select(getCheckinoutDates), takeUntil(this.destroy$))
+    this.store.pipe(select(getCheckinoutDates), takeUntil(this.destroy$), tap(value => console.log(value)))
       .subscribe(dates => this.searchForm.patchValue(dates, { emitEvent: false }));
 
     // Subscribe to changes in searchTerm and emit an action.
@@ -57,11 +57,11 @@ export class LocationSearchBoxComponent implements OnDestroy, OnInit {
   }
 
   selected({ option: { value: { id }}}) {
-    let { checkinDate, checkoutDate } = this.searchForm.value;
-    this.store.dispatch(new SelectLocation({ id, checkinDate, checkoutDate }));
-    checkinDate = (checkinDate as Date).toISOString().slice(0, 10);
-    checkoutDate = (checkoutDate as Date).toISOString().slice(0, 10);
-    this.router.navigate([ 'locations', id ], { queryParams: { checkinDate, checkoutDate } });
+    this.store.dispatch(new SelectLocation({ id }));
   }
 
+  changeDate() {
+    const { checkinDate, checkoutDate } = this.searchForm.value;
+    this.store.dispatch(new ChangeDates({ checkinDate, checkoutDate }));
+  }
 }
