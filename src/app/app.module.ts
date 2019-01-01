@@ -36,6 +36,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RoomkeyApiInterceptor } from './services/roomkey-api.interceptor';
+import { LocationDetailsComponent } from './components/location-details/location-details.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { RoomkeyApiInterceptor } from './services/roomkey-api.interceptor';
     NavigationComponent,
     LocationPageComponent,
     LocationSearchBoxComponent,
+    LocationDetailsComponent,
   ],
   imports: [
     BrowserAnimationsModule,

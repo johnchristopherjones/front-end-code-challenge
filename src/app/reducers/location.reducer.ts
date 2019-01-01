@@ -1,7 +1,7 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Location } from '../models/location.model';
 import { LocationActions, LocationActionTypes } from '../actions/location.actions';
-import { createFeatureSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 
 export interface State extends EntityState<Location> {
   // additional entities state properties
@@ -83,3 +83,9 @@ export const {
   selectTotal: getTotalLocations,
 } = adapter.getSelectors(getLocationState);
 
+export const getSelectedLocationId = createSelector(getLocationState, state => state.selectedLocation);
+export const getSelectedLocation = createSelector(
+  getLocationEntities,
+  getSelectedLocationId,
+  (entities, id) => entities[id]
+);
