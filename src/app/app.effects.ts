@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { LocationActionTypes, SearchLocations } from './actions/location.actions';
-import { tap, debounceTime, switchMap, flatMap, catchError } from 'rxjs/operators';
+import { LocationActionTypes, SearchLocations, SelectLocation, LoadLocations } from './actions/location.actions';
+import { tap, debounceTime, switchMap, flatMap, catchError, filter, map } from 'rxjs/operators';
 import { RoomkeyApiService } from './services/roomkey-api.service';
 import { LoadAutofillLocations } from './actions/autofill-location.actions';
 import { LoadAutofillAirports } from './actions/autofill-airport.actions';
-import { of } from 'rxjs';
+import { of, empty } from 'rxjs';
 
 
 @Injectable()
@@ -22,6 +22,8 @@ export class AppEffects {
     debounceTime(debounce),
     // Hit the API with that search query
     switchMap(({ payload: { searchTerm } }) => this.api.autofill(searchTerm).pipe(
+      // Make sure we retain the last useful autofill results
+      filter(({ locations, airports }) => locations.length > 0 && airports.length > 0),
       // Handle errors (kinda)
       catchError(err => {
         console.log(err);
@@ -33,6 +35,22 @@ export class AppEffects {
       new LoadAutofillLocations({ autofillLocations }),
       new LoadAutofillAirports({ autofillAirports })
     ]),
+  )
+
+  /**
+   * Request details about the selected location
+   */
+  @Effect()
+  selectLocation$ = ({ debounce = 200 /*ms*/ } = {}) => this.actions$.pipe(
+    ofType<SelectLocation>(LocationActionTypes.SelectLocation),
+    debounceTime(debounce),
+    switchMap(({ payload: { id } }) => this.api.location(id).pipe(
+      catchError(err => {
+        console.log(err);
+        return empty();
+      })
+    )),
+    map(location => new LoadLocations({ locations: [ location ]}))
   )
 
   constructor(private actions$: Actions, private api: RoomkeyApiService) { }

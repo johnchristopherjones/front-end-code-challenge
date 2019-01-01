@@ -59,6 +59,13 @@ export function reducer(
       return adapter.removeAll(state);
     }
 
+    case LocationActionTypes.SelectLocation: {
+      return {
+        ...state,
+        selectedLocation: action.payload.id
+      };
+    }
+
     default: {
       return state;
     }
