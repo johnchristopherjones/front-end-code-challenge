@@ -17,12 +17,22 @@ interface AutofillResponse {
 
 type LocationResponse = Location;
 
-const defaultLocationFields = [
-  'countryName', 'countryCode', 'fullName', 'hotelCount',
-  'name', 'regionName', 'lat', 'lng', 'geometry', 'id',
-  'has_photo'
+const defaultLocationFields: (keyof Location)[] = [
+  'id', 'lat', 'lng', 'has_photo', 'hotel_count', 'region_name',
+  'name', 'country_code', 'country_name', 'full_name', 'geometry'
 ];
 
+
+
+/**
+ * Requests that can be made to the Roomkey API server.
+ *
+ * Notes:
+ * - Most API endpoints appear to accept a list of fields to return.
+ * - The API returns fields in snake_case.
+ * - In production, the Roomkey website requests fields with snakeCase,
+ *   but the API appears to accept snake_case.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -36,7 +46,7 @@ export class RoomkeyApiService {
   }
 
   /** Get details about location */
-  location(id: string, ...fields: string[]): Observable<LocationResponse> {
+  location(id: string, ...fields: (keyof Location)[]): Observable<LocationResponse> {
     fields = fields.length === 0 ? defaultLocationFields : fields;
     return this.http.get<LocationResponse>(locationUri(id), { params: { 'fields[]': fields }, });
   }

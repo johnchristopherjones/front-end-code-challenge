@@ -9,6 +9,7 @@ export interface Location {
   region_name: string;
   name: string;
   country_code: string;
+  country_name: string;
   full_name: string;
   geometry: Geometry;
 }
