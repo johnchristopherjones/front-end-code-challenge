@@ -38,9 +38,8 @@ export class RoomkeyApiService {
   /** Get details about location */
   location(id: string, ...fields: string[]): Observable<LocationResponse> {
     fields = fields.length === 0 ? defaultLocationFields : fields;
-    return this.http.get<LocationResponse>(locationUri(id), {
-      headers: { 'Accept': 'application/json' },
-      params: { ['fields[]']: fields },
-    });
+    return this.http.get<LocationResponse>(locationUri(id), { params: { 'fields[]': fields }, });
+  }
+
   }
 }

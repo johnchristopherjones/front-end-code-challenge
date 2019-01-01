@@ -34,7 +34,8 @@ import { LocationPageComponent } from './components/location-page/location-page.
 import { LocationSearchBoxComponent } from './components/location-search-box/location-search-box.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { RoomkeyApiInterceptor } from './services/roomkey-api.interceptor';
 
 @NgModule({
   declarations: [
@@ -71,7 +72,9 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     MatAutocompleteModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: RoomkeyApiInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
