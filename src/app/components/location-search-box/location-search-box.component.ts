@@ -1,16 +1,16 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { first, takeUntil, tap } from 'rxjs/operators';
-import { SearchLocations, SelectLocation, ChangeDates } from 'src/app/actions/location.actions';
+import { takeUntil } from 'rxjs/operators';
+import { ChangeDates, SearchLocations, SelectLocation } from 'src/app/actions/location.actions';
 import { AutofillAirport } from 'src/app/models/autofill-airport.model';
 import { AutofillLocation } from 'src/app/models/autofill-location.model';
 import { State } from 'src/app/reducers';
 import { getAllAutofillAirports } from 'src/app/reducers/autofill-airport.reducer';
 import { getAllAutofillLocations } from 'src/app/reducers/autofill-location.reducer';
-import { getCheckinoutDates, getSelectedLocationId } from 'src/app/reducers/location.reducer';
+import { getCheckinoutDates } from 'src/app/reducers/location.reducer';
 
 @Component({
   selector: 'app-location-search-box',
@@ -19,22 +19,19 @@ import { getCheckinoutDates, getSelectedLocationId } from 'src/app/reducers/loca
 })
 export class LocationSearchBoxComponent implements OnDestroy, OnInit {
   destroy$ = new Subject();
-  searchForm: FormGroup;
   locationOptions$: Observable<AutofillLocation[]>;
   airportOptions$: Observable<AutofillAirport[]>;
+  searchForm = this.fb.group({
+    searchTerm: '',
+    checkinDate: null,
+    checkoutDate: null
+  });
 
   constructor(private fb: FormBuilder, private store: Store<State>, private router: Router) {}
 
   ngOnInit() {
-    // Create a new Reactive Form
-    this.searchForm = this.fb.group({
-      searchTerm: '',
-      checkinDate: null,
-      checkoutDate: null
-    });
-
     // Initialize form with initial values from store
-    this.store.pipe(select(getCheckinoutDates), takeUntil(this.destroy$), tap(value => console.log(value)))
+    this.store.pipe(select(getCheckinoutDates), takeUntil(this.destroy$))
       .subscribe(dates => this.searchForm.patchValue(dates, { emitEvent: false }));
 
     // Subscribe to changes in searchTerm and emit an action.
