@@ -1,15 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { LocationActionTypes, SearchLocations, SelectLocation, LoadLocations } from './actions/location.actions';
-import { tap, debounceTime, switchMap, flatMap, catchError, filter, map } from 'rxjs/operators';
-import { RoomkeyApiService } from './services/roomkey-api.service';
-import { LoadAutofillLocations } from './actions/autofill-location.actions';
+import { merge, of } from 'rxjs';
+import { catchError, debounceTime, filter, flatMap, map, switchMap, tap } from 'rxjs/operators';
 import { LoadAutofillAirports } from './actions/autofill-airport.actions';
-import { of, empty } from 'rxjs';
+import { LoadAutofillLocations } from './actions/autofill-location.actions';
+import { ApiResponseError, CoreActionTypes } from './actions/core.actions';
+import { LoadLocations, LocationActionTypes, SearchLocations, SelectLocation } from './actions/location.actions';
+import { RoomkeyApiService } from './services/roomkey-api.service';
 
 
 @Injectable()
 export class AppEffects {
+
+  @Effect({ dispatch: false })
+  logApiResponseErrors = this.actions$.pipe(
+    ofType<ApiResponseError>(CoreActionTypes.ApiResponseError),
+    tap(({ payload: { error }}) => console.log(error))
+  );
 
   /**
    * Request location autofill choices from the API server.
@@ -24,17 +31,17 @@ export class AppEffects {
     switchMap(({ payload: { searchTerm } }) => this.api.autofill(searchTerm).pipe(
       // Make sure we retain the last useful autofill results
       filter(({ locations, airports }) => locations.length > 0 && airports.length > 0),
+      // Split response into load actions for each store
+      flatMap(({ locations: autofillLocations, airports: autofillAirports }) => [
+        new LoadAutofillLocations({ autofillLocations }),
+        new LoadAutofillAirports({ autofillAirports })
+      ]),
       // Handle errors (kinda)
-      catchError(err => {
-        console.log(err);
-        return of({ searchTerm, locations: [], airports: [] });
-      })
+      catchError(error => merge(
+        of(new ApiResponseError({ error })),
+        of({ searchTerm, locations: [], airports: [] })
+      ))
     )),
-    // Split response into load actions for each store
-    flatMap(({ locations: autofillLocations, airports: autofillAirports }) => [
-      new LoadAutofillLocations({ autofillLocations }),
-      new LoadAutofillAirports({ autofillAirports })
-    ]),
   )
 
   /**
@@ -45,12 +52,11 @@ export class AppEffects {
     ofType<SelectLocation>(LocationActionTypes.SelectLocation),
     debounceTime(debounce),
     switchMap(({ payload: { id } }) => this.api.location(id).pipe(
-      catchError(err => {
-        console.log(err);
-        return empty();
-      })
+      map(location => new LoadLocations({ locations: [ location ] })),
+      catchError(error => of(new ApiResponseError({ error })))
     )),
-    map(location => new LoadLocations({ locations: [ location ]}))
+  )
+
   )
 
   constructor(private actions$: Actions, private api: RoomkeyApiService) { }
