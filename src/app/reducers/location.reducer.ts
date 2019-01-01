@@ -72,7 +72,9 @@ export function reducer(
     case LocationActionTypes.SelectLocation: {
       return {
         ...state,
-        selectedLocation: action.payload.id
+        selectedLocation: action.payload.id,
+        checkinDate: action.payload.checkinDate || state.checkinDate,
+        checkoutDate: action.payload.checkoutDate || state.checkoutDate
       };
     }
 

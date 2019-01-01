@@ -78,13 +78,13 @@ export class ClearLocations implements Action {
 export class SearchLocations implements Action {
   readonly type = LocationActionTypes.SearchLocations;
 
-  constructor(public payload: { searchTerm: string, checkinDate: Date, checkoutDate: Date }) {}
+  constructor(public payload: { searchTerm: string }) {}
 }
 
 export class SelectLocation implements Action {
   readonly type = LocationActionTypes.SelectLocation;
 
-  constructor(public payload: { id: string }) {}
+  constructor(public payload: { id: string, checkinDate?: Date, checkoutDate?: Date }) {}
 }
 
 export type LocationActions =

@@ -40,8 +40,8 @@ export class LocationSearchBoxComponent implements OnDestroy, OnInit {
     // Subscribe to changes in searchTerm and emit an action.
     this.searchForm.valueChanges
       .pipe(takeUntil(this.destroy$))
-      .subscribe(({ searchTerm, checkinDate, checkoutDate }) =>
-        this.store.dispatch(new SearchLocations({ searchTerm, checkinDate, checkoutDate })));
+      .subscribe(({ searchTerm }) =>
+        this.store.dispatch(new SearchLocations({ searchTerm })));
 
     // Subscribe to autofill options; these will change as search results come in
     this.locationOptions$ = this.store.pipe(select(getAllAutofillLocations));
@@ -57,8 +57,11 @@ export class LocationSearchBoxComponent implements OnDestroy, OnInit {
   }
 
   selected({ option: { value: { id }}}) {
-    this.store.dispatch(new SelectLocation({ id }));
-    this.router.navigate([ 'locations', id ]);
+    let { checkinDate, checkoutDate } = this.searchForm.value;
+    this.store.dispatch(new SelectLocation({ id, checkinDate, checkoutDate }));
+    checkinDate = (checkinDate as Date).toISOString().slice(0, 10);
+    checkoutDate = (checkoutDate as Date).toISOString().slice(0, 10);
+    this.router.navigate([ 'locations', id ], { queryParams: { checkinDate, checkoutDate } });
   }
 
 }
