@@ -78,7 +78,7 @@ export class ClearLocations implements Action {
 export class SearchLocations implements Action {
   readonly type = LocationActionTypes.SearchLocations;
 
-  constructor(public payload: { searchTerm: string }) {}
+  constructor(public payload: { searchTerm: string, checkinDate: Date, checkoutDate: Date }) {}
 }
 
 export class SelectLocation implements Action {

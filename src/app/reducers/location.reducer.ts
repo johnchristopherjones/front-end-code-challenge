@@ -6,13 +6,22 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 export interface State extends EntityState<Location> {
   // additional entities state properties
   selectedLocation: string;
+  checkinDate: Date;
+  checkoutDate: Date;
 }
 
 export const adapter: EntityAdapter<Location> = createEntityAdapter<Location>();
+const tomorrow = () => {
+  const next = new Date();
+  next.setDate(next.getDate() + 1);
+  return next;
+};
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
-  selectedLocation: null
+  selectedLocation: null,
+  checkinDate: new Date(),
+  checkoutDate: tomorrow()
 });
 
 export function reducer(
@@ -89,3 +98,5 @@ export const getSelectedLocation = createSelector(
   getSelectedLocationId,
   (entities, id) => entities[id]
 );
+
+export const getCheckinoutDates = createSelector(getLocationState, ({ checkinDate, checkoutDate }) => ({ checkinDate, checkoutDate }));
