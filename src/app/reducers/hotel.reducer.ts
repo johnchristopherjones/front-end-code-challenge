@@ -2,6 +2,7 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Hotel } from '../models/hotel.model';
 import { HotelActions, HotelActionTypes } from '../actions/hotel.actions';
 import { HotelMetadata } from '../models/hotel-metadata.model';
+import { createFeatureSelector } from '@ngrx/store';
 
 export interface State extends EntityState<Hotel> {
   // additional entities state properties
@@ -69,9 +70,12 @@ export function reducer(
   }
 }
 
+export const stateKey = 'hotels';
+export const getHotelState = createFeatureSelector<State>(stateKey);
+
 export const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal,
-} = adapter.getSelectors();
+  selectIds: getHotelIds,
+  selectEntities: getHotelEntities,
+  selectAll: getAllHotels,
+  selectTotal: getTotalHotels,
+} = adapter.getSelectors(getHotelState);

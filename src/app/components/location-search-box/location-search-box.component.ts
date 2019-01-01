@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { State, selectAutofillAirports, selectAllAutofillLocations, selectAllAutofillAirports } from 'src/app/reducers';
+import { State } from 'src/app/reducers';
 import { Store, select } from '@ngrx/store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { distinctUntilKeyChanged, takeUntil, tap } from 'rxjs/operators';
@@ -7,6 +7,8 @@ import { SearchLocations, SelectLocation } from 'src/app/actions/location.action
 import { Subject, Observable } from 'rxjs';
 import { AutofillLocation } from 'src/app/models/autofill-location.model';
 import { AutofillAirport } from 'src/app/models/autofill-airport.model';
+import { getAllAutofillLocations } from 'src/app/reducers/autofill-location.reducer';
+import { getAllAutofillAirports } from 'src/app/reducers/autofill-airport.reducer';
 
 @Component({
   selector: 'app-location-search-box',
@@ -35,8 +37,8 @@ export class LocationSearchBoxComponent implements OnDestroy, OnInit {
       .subscribe(({ searchTerm }) => this.store.dispatch(new SearchLocations({ searchTerm })));
 
     // Subscribe to autofill options
-    this.locationOptions$ = this.store.pipe(select(selectAllAutofillLocations), tap(vs => console.log(vs)));
-    this.airportOptions$ = this.store.pipe(select(selectAllAutofillAirports));
+    this.locationOptions$ = this.store.pipe(select(getAllAutofillLocations), tap(vs => console.log(vs)));
+    this.airportOptions$ = this.store.pipe(select(getAllAutofillAirports));
   }
 
   ngOnDestroy() {

@@ -1,6 +1,7 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { AutofillLocation } from '../models/autofill-location.model';
 import { AutofillLocationActions, AutofillLocationActionTypes } from '../actions/autofill-location.actions';
+import { createFeatureSelector } from '@ngrx/store';
 
 export interface State extends EntityState<AutofillLocation> {
   // additional entities state properties
@@ -62,10 +63,12 @@ export function reducer(
     }
   }
 }
+export const stateKey = 'autofillLocations';
+export const getAutofillLocationState = createFeatureSelector<State>(stateKey);
 
 export const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal,
-} = adapter.getSelectors();
+  selectIds: getAutofillLocationIds,
+  selectEntities: getAutofillLocationEntities,
+  selectAll: getAllAutofillLocations,
+  selectTotal: getTotalAutofillLocations,
+} = adapter.getSelectors(getAutofillLocationState);

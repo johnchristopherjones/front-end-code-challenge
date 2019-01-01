@@ -1,6 +1,7 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Airport } from '../models/airport.model';
 import { AirportActions, AirportActionTypes } from '../actions/airport.actions';
+import { createFeatureSelector } from '@ngrx/store';
 
 export interface State extends EntityState<Airport> {
   // additional entities state properties
@@ -63,9 +64,12 @@ export function reducer(
   }
 }
 
+export const stateKey = 'airports';
+export const getAirportState = createFeatureSelector<State>(stateKey);
+
 export const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal,
-} = adapter.getSelectors();
+  selectIds: getAirportIds,
+  selectEntities: getAirportEntities,
+  selectAll: getAllAirports,
+  selectTotal: getTotalAirports,
+} = adapter.getSelectors(getAirportState);

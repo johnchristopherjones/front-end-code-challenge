@@ -1,6 +1,7 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Location } from '../models/location.model';
 import { LocationActions, LocationActionTypes } from '../actions/location.actions';
+import { createFeatureSelector } from '@ngrx/store';
 
 export interface State extends EntityState<Location> {
   // additional entities state properties
@@ -72,9 +73,13 @@ export function reducer(
   }
 }
 
+export const stateKey = 'locations';
+export const getLocationState = createFeatureSelector<State>(stateKey);
+
 export const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal,
-} = adapter.getSelectors();
+  selectIds: getLocationIds,
+  selectEntities: getLocationEntities,
+  selectAll: getAllLocations,
+  selectTotal: getTotalLocations,
+} = adapter.getSelectors(getLocationState);
+
