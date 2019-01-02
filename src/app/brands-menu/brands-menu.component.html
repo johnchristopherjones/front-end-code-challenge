@@ -1,0 +1,13 @@
+<button mat-raised-button [matMenuTriggerFor]="menu">{{ menuTitle$ | async }}</button>
+<mat-menu #menu="matMenu" yPosition="below" [overlapTrigger]="false" focusFirst>
+
+  <button mat-menu-item
+    role="menuitemcheckbox"
+    *ngFor="let brand of allBrands$ | async"
+    (click)="selection.toggle(brand.id)">
+    <mat-checkbox [checked]="isSelected$(brand.id) | async"></mat-checkbox>
+    {{ brand.name }}
+    <span style="float: right">({{brand.hotel_count}})</span>
+  </button>
+
+</mat-menu>

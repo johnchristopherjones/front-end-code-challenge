@@ -39,6 +39,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RoomkeyApiInterceptor } from './services/roomkey-api.interceptor';
 import { LocationDetailsComponent } from './components/location-details/location-details.component';
 import { AmenitiesMenuComponent } from './components/amenities-menu/amenities-menu.component';
+import { BrandsMenuComponent } from './brands-menu/brands-menu.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { AmenitiesMenuComponent } from './components/amenities-menu/amenities-me
     LocationSearchBoxComponent,
     LocationDetailsComponent,
     AmenitiesMenuComponent,
+    BrandsMenuComponent,
   ],
   imports: [
     BrowserAnimationsModule,

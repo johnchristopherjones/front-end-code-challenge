@@ -9,6 +9,7 @@ import { LoadHotels } from './actions/hotel.actions';
 import { LoadLocations, LocationActionTypes, SearchLocations, SelectLocation } from './actions/location.actions';
 import { RoomkeyApiService } from './services/roomkey-api.service';
 import { LoadAmenities } from './actions/amenity.actions';
+import { LoadBrands } from './actions/brand.actions';
 
 
 @Injectable()
@@ -73,7 +74,8 @@ export class AppEffects {
     switchMap(({ payload: { id } }) => this.api.hotels(id).pipe(
       mergeMap(({ data: hotels, metadata }) => [
         new LoadHotels({ hotels, metadata }),
-        new LoadAmenities({ amenities: metadata.amenities })
+        new LoadAmenities({ amenities: metadata.amenities }),
+        new LoadBrands({ brands: metadata.brands }),
       ]),
       catchError(error => of(new ApiResponseError({ error })))
     ))

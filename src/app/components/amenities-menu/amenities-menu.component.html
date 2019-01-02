@@ -8,7 +8,7 @@
     (click)="selection.toggle(amenity.code)">
     <mat-checkbox [checked]="isSelected$(amenity.code) | async"></mat-checkbox>
     {{ amenity.name }}
-    <span style="align-self:flex-end">({{amenity.hotel_count}})</span>
+    <span style="float: right">({{amenity.hotel_count}})</span>
   </button>
 
   <button mat-menu-item disabled>All Amenities</button>
@@ -18,7 +18,7 @@
     (click)="selection.toggle(amenity.code)">
     <mat-checkbox [checked]="isSelected$(amenity.code) | async"></mat-checkbox>
     {{ amenity.name }}
-    <span style="align-self:flex-end">({{amenity.hotel_count}})</span>
+    <span style="float: right">({{amenity.hotel_count}})</span>
   </button>
 
 </mat-menu>

@@ -8,11 +8,6 @@ import { Amenity } from 'src/app/models/amenity.model';
 import { State } from 'src/app/reducers';
 import { getAllAmenities, getPopularAmenities, getSelectedAmenityIds, getSelectedAmenities } from 'src/app/reducers/amenity.reducer';
 
-const amenitiesTitles = {
-  0: () => 'Any amenities',
-  1: ([amenity]) => amenity.name,
-  default: amenities => `${amenities.length} amenities`
-};
 
 @Component({
   selector: 'app-amenities-menu',

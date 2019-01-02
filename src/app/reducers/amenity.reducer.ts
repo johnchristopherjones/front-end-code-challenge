@@ -2,6 +2,7 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { Amenity } from '../models/amenity.model';
 import { AmenityActions, AmenityActionTypes } from '../actions/amenity.actions';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { idsToEntities } from './utilities';
 
 export interface State extends EntityState<Amenity> {
   // additional entities state properties
@@ -82,8 +83,6 @@ export const {
   selectAll: getAllAmenities,
   selectTotal: getTotalAmenities,
 } = adapter.getSelectors(getAmentitiesState);
-
-const idsToEntities = (entities, ids) => ids.map(id => entities[id]).filter(a => !!a);
 
 export const getSelectedAmenityIds = createSelector(getAmentitiesState, state => state.selected);
 export const getSelectedAmenities = createSelector(getAmentityEntities, getSelectedAmenityIds, idsToEntities);
