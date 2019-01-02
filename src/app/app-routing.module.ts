@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LocationPageComponent } from './components/location-page/location-page.component';
 import { LocationDetailsComponent } from './components/location-details/location-details.component';
+import { HotelTableComponent } from './components/hotel-table/hotel-table.component';
 
 const routes: Routes = [
   {
@@ -15,7 +16,13 @@ const routes: Routes = [
     children: [
       {
         path: ':locationId',
-        component: LocationDetailsComponent
+        component: LocationDetailsComponent,
+        children: [
+          {
+            path: 'hotels',
+            component: HotelTableComponent
+          }
+        ]
       }
     ]
   },

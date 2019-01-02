@@ -40,6 +40,7 @@ import { RoomkeyApiInterceptor } from './services/roomkey-api.interceptor';
 import { LocationDetailsComponent } from './components/location-details/location-details.component';
 import { AmenitiesMenuComponent } from './components/amenities-menu/amenities-menu.component';
 import { BrandsMenuComponent } from './components/brands-menu/brands-menu.component';
+import { HotelTableComponent } from './components/hotel-table/hotel-table.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { BrandsMenuComponent } from './components/brands-menu/brands-menu.compon
     LocationDetailsComponent,
     AmenitiesMenuComponent,
     BrandsMenuComponent,
+    HotelTableComponent,
   ],
   imports: [
     BrowserAnimationsModule,
