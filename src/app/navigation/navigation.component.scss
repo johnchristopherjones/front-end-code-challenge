@@ -18,11 +18,13 @@
 
 .header-logo-bar {
   $logo-height: 46px;
-  $padding: 30px;
+  $padding: 8px;
   height: $logo-height + $padding;
   font-size: 22px;
+  padding-top: $padding;
+  padding-bottom: $padding;
   img {
-    height: 38px;
+    height: 100%;
     margin-right: 20px;
   }
 }
@@ -33,5 +35,6 @@
   flex-direction: row;
   app-location-search-box {
     flex-basis: 100%;
+    padding-top: 26px;
   }
 }
