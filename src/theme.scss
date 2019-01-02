@@ -5,7 +5,7 @@
 // Primary: #253544
 // Accent: #e74c3c
 
-$roomeky-primary-palette: (
+$roomkey-primary-palette: (
     50 : #e5e7e9,
     100 : #bec2c7,
     200 : #929aa2,
@@ -71,8 +71,8 @@ $roomkey-accent-palette: (
     )
 );
 
-$roomkey-app-primary: mat-palette($roomeky-primary-palette);
-$roomkey-app-accent: mat-palette($roomkey-accent-palette, A200, A100, A400);
+$roomkey-app-primary: mat-palette($roomkey-primary-palette);
+$roomkey-app-accent: mat-palette($roomkey-primary-palette, A200, A100, A400);
 $roomkey-app-warn: mat-palette($mat-red);
 $roomkey-app-theme: mat-dark-theme($roomkey-app-primary, $roomkey-app-accent, $roomkey-app-warn);
 
