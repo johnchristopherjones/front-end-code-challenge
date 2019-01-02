@@ -3,6 +3,7 @@ import { MatPaginator, MatSort } from '@angular/material';
 import { map, withLatestFrom, startWith } from 'rxjs/operators';
 import { Observable, merge, BehaviorSubject } from 'rxjs';
 import { Hotel } from 'src/app/models/hotel.model';
+import { Amenity } from 'src/app/models/amenity.model';
 
 // TODO: Replace this with your own data model type
 type HotelTableItem = Hotel;
@@ -15,7 +16,13 @@ type HotelTableItem = Hotel;
 export class HotelTableDataSource extends DataSource<HotelTableItem> {
   length = 0;
 
-  constructor(private paginator: MatPaginator, private sort: MatSort, private hotels: Observable<Hotel[]>) {
+  constructor(
+    private paginator: MatPaginator,
+    private sort: MatSort,
+    private hotels: Observable<Hotel[]>,
+    private amenityIds: Observable<string[]>,
+    private brandIds: Observable<string[]>
+  ) {
     super();
   }
 
@@ -28,16 +35,18 @@ export class HotelTableDataSource extends DataSource<HotelTableItem> {
     // Combine everything that affects the rendered data into one update
     // stream for the data-table to consume.
     const dataMutations = [
-      this.hotels,
       this.paginator.page,
-      this.sort.sortChange
+      this.sort.sortChange,
+      this.hotels,
+      this.amenityIds,
+      this.brandIds
     ];
 
     return merge(...dataMutations).pipe(
-      withLatestFrom(this.hotels),
-      map(([_, hotels]) => {
+      withLatestFrom(this.hotels, this.amenityIds, this.brandIds),
+      map(([_, hotels, amenityIds, brandIds]) => {
         this.paginator.length = hotels.length;
-        return this.getPagedData(this.getSortedData([...hotels]));
+        return this.getPagedData(this.getFilteredData(this.getSortedData([...hotels]), amenityIds, brandIds));
       })
     );
   }
@@ -75,7 +84,19 @@ export class HotelTableDataSource extends DataSource<HotelTableItem> {
       }
     });
   }
+
+  private getFilteredData(data: Hotel[], amendityCodes: string[], brandIds: string[]): Hotel[] {
+    const amenitySet = new Set(amendityCodes);
+    const brandSet = new Set(brandIds);
+
+    const includeByAmenity = ({ amenities }: Hotel ) =>
+      amenitySet.size === 0
+      || amendityCodes.every(id => !!amenities.find(({ code }) => id === code));
+    const includeByBrands = ({ brand }: Hotel) => brandSet.size === 0 || brandSet.has(brand && brand.id);
+    return data.filter(hotel => includeByAmenity(hotel) && includeByBrands(hotel));
+  }
 }
+
 
 /** Simple sort comparator for example ID/Name columns (for client-side sorting). */
 function compare(a, b, isAsc) {

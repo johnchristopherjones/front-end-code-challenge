@@ -22,7 +22,7 @@ type LocationResponse = Location;
 
 const defaultLocationFields: (keyof Location)[] = [
   'id', 'lat', 'lng', 'has_photo', 'hotel_count', 'region_name',
-  'name', 'country_code', 'country_name', 'full_name', 'geometry'
+  'name', 'country_code', 'country_name', 'full_name', 'geometry',
 ];
 
 interface HotelResponse {
@@ -32,7 +32,7 @@ interface HotelResponse {
 
 const defaultHotelFields: (keyof Hotel)[] = [
   'address', 'brand', 'country_code', 'lat', 'lng', 'name',
-  'primary_photo', 'udicode', 'user_rating'
+  'primary_photo', 'udicode', 'user_rating', 'amenities'
 ];
 
 
