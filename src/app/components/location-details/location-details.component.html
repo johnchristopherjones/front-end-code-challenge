@@ -1,7 +1,7 @@
 <mat-toolbar>
   <mat-toolbar-row fxLayoutGap="16px">
     <button mat-raised-button>Any price</button>
-    <button mat-raised-button>Any amenities</button>
+    <app-amenities-menu></app-amenities-menu>
     <button mat-raised-button>Any brands</button>
     <span >{{ fullName$ | async }}</span>
   </mat-toolbar-row>

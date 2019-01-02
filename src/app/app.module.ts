@@ -28,7 +28,8 @@ import {
   MatNativeDateModule,
   MatDatepickerModule,
   MatInputModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatCheckboxModule
 } from '@angular/material';
 import { LocationPageComponent } from './components/location-page/location-page.component';
 import { LocationSearchBoxComponent } from './components/location-search-box/location-search-box.component';
@@ -37,6 +38,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RoomkeyApiInterceptor } from './services/roomkey-api.interceptor';
 import { LocationDetailsComponent } from './components/location-details/location-details.component';
+import { AmenitiesMenuComponent } from './components/amenities-menu/amenities-menu.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,7 @@ import { LocationDetailsComponent } from './components/location-details/location
     LocationPageComponent,
     LocationSearchBoxComponent,
     LocationDetailsComponent,
+    AmenitiesMenuComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -70,6 +73,7 @@ import { LocationDetailsComponent } from './components/location-details/location
     MatNativeDateModule,
     MatDatepickerModule,
     MatInputModule,
+    MatCheckboxModule,
     ReactiveFormsModule,
     HttpClientModule,
     MatAutocompleteModule

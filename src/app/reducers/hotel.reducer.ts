@@ -1,8 +1,8 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { Hotel } from '../models/hotel.model';
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { createFeatureSelector } from '@ngrx/store';
 import { HotelActions, HotelActionTypes } from '../actions/hotel.actions';
 import { HotelMetadata } from '../models/hotel-metadata.model';
-import { createFeatureSelector } from '@ngrx/store';
+import { Hotel } from '../models/hotel.model';
 
 export interface State extends EntityState<Hotel> {
   // additional entities state properties

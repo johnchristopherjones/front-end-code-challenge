@@ -1,0 +1,24 @@
+<button mat-raised-button [matMenuTriggerFor]="menu">{{ menuTitle$ | async }}</button>
+<mat-menu #menu="matMenu" yPosition="below" [overlapTrigger]="false" focusFirst>
+
+  <button mat-menu-item disabled>Popular Amenities</button>
+  <button mat-menu-item
+    role="menuitemcheckbox"
+    *ngFor="let amenity of popularAmenities$ | async"
+    (click)="selection.toggle(amenity.code)">
+    <mat-checkbox [checked]="isSelected$(amenity.code) | async"></mat-checkbox>
+    {{ amenity.name }}
+    <span style="align-self:flex-end">({{amenity.hotel_count}})</span>
+  </button>
+
+  <button mat-menu-item disabled>All Amenities</button>
+  <button mat-menu-item
+    role="menuitemcheckbox"
+    *ngFor="let amenity of allAmenities$ | async"
+    (click)="selection.toggle(amenity.code)">
+    <mat-checkbox [checked]="isSelected$(amenity.code) | async"></mat-checkbox>
+    {{ amenity.name }}
+    <span style="align-self:flex-end">({{amenity.hotel_count}})</span>
+  </button>
+
+</mat-menu>
