@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Brand } from '../models/brand.model';
+import { Brand } from 'src/app/models/brand.model';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Store, select } from '@ngrx/store';
-import { getAllBrands, getSelectedBrandIds, getSelectedBrands } from '../reducers/brand.reducer';
-import { SelectBrands } from '../actions/brand.actions';
-import { State } from '../reducers';
+import { getAllBrands, getSelectedBrandIds, getSelectedBrands } from 'src/app/reducers/brand.reducer';
+import { SelectBrands } from 'src/app/actions/brand.actions';
+import { State } from 'src/app/reducers';
 
 @Component({
   selector: 'app-brands-menu',
