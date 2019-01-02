@@ -20,6 +20,7 @@ export class AmenitiesMenuComponent implements OnInit {
   selectedAmenities$: Observable<Amenity[]>;
   selectedAmenityIds$: Observable<string[]>;
   menuTitle$: Observable<string>;
+  buttonColor$: Observable<string>;
   selection = new SelectionModel<string>(true, []);
 
   constructor(private store: Store<State>) { }
@@ -29,6 +30,7 @@ export class AmenitiesMenuComponent implements OnInit {
     this.popularAmenities$ = this.store.pipe(select(getPopularAmenities));
     this.selectedAmenityIds$ = this.store.pipe(select(getSelectedAmenityIds));
     this.selectedAmenities$ = this.store.pipe(select(getSelectedAmenities));
+    this.buttonColor$ = this.selectedAmenities$.pipe(map(xs => xs.length > 0 ? 'accent' : 'default'));
     this.menuTitle$ = this.selectedAmenities$.pipe(map(amenities => {
       switch (amenities.length) {
         case 0: return 'Any amenities';

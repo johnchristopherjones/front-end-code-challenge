@@ -1,4 +1,4 @@
-<button mat-raised-button [matMenuTriggerFor]="menu">{{ menuTitle$ | async }}</button>
+<button mat-raised-button [color]="buttonColor$ | async" [matMenuTriggerFor]="menu">{{ menuTitle$ | async }}</button>
 <mat-menu #menu="matMenu" yPosition="below" [overlapTrigger]="false" focusFirst>
 
   <button mat-menu-item

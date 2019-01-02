@@ -18,6 +18,7 @@ export class BrandsMenuComponent implements OnInit {
   selectedBrands$: Observable<Brand[]>;
   selectedBrandIds$: Observable<string[]>;
   menuTitle$: Observable<string>;
+  buttonColor$: Observable<string>;
   selection = new SelectionModel<string>(true, []);
 
   constructor(private store: Store<State>) { }
@@ -26,6 +27,7 @@ export class BrandsMenuComponent implements OnInit {
     this.allBrands$ = this.store.pipe(select(getAllBrands));
     this.selectedBrandIds$ = this.store.pipe(select(getSelectedBrandIds));
     this.selectedBrands$ = this.store.pipe(select(getSelectedBrands));
+    this.buttonColor$ = this.selectedBrandIds$.pipe(map(xs => xs.length > 0 ? 'accent' : 'default'));
     this.menuTitle$ = this.selectedBrands$.pipe(map(Brands => {
       switch (Brands.length) {
         case 0: return 'Any Brands';
