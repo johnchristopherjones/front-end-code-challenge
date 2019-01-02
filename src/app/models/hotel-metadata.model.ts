@@ -1,3 +1,5 @@
+import { Amenity } from './amenity.model';
+
 export interface HotelMetadataStatistic {
   highest: number;
   lowest: number;
@@ -5,13 +7,7 @@ export interface HotelMetadataStatistic {
   median: number | null;
 }
 
-interface HotelMetadataAmenity {
-  code: string; // 5 characters
-  hotel_count: number;
-  name: string;
-}
-
-interface HotelMetadataBrand {
+export interface HotelMetadataBrand {
   group_id: string; // an integer in a string
   hotel_count: number;
   id: string; // an integer in a string
@@ -19,13 +15,13 @@ interface HotelMetadataBrand {
 }
 
 /** Appears be a group-by of brands on group_id, where id = group_id */
-type HotelMetadataGroups = HotelMetadataBrand;
+export type HotelMetadataGroups = HotelMetadataBrand;
 
 export interface HotelMetadata {
   aggregated_best_rates: HotelMetadataStatistic;
   aggregated_start_ratings: HotelMetadataStatistic;
   aggreated_user_ratings: HotelMetadataStatistic;
-  amenities: HotelMetadataAmenity[];
+  amenities: Amenity[];
   brands: HotelMetadataBrand[];
   groups: HotelMetadataGroups[];
   hotel_count: number;

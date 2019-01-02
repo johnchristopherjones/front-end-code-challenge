@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { merge, of } from 'rxjs';
-import { catchError, debounceTime, filter, flatMap, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, filter, flatMap, map, switchMap, tap, mergeMap } from 'rxjs/operators';
 import { LoadAutofillAirports } from './actions/autofill-airport.actions';
 import { LoadAutofillLocations } from './actions/autofill-location.actions';
 import { ApiResponseError, CoreActionTypes } from './actions/core.actions';
 import { LoadHotels } from './actions/hotel.actions';
 import { LoadLocations, LocationActionTypes, SearchLocations, SelectLocation } from './actions/location.actions';
 import { RoomkeyApiService } from './services/roomkey-api.service';
+import { LoadAmenities } from './actions/amenity.actions';
 
 
 @Injectable()
@@ -70,7 +71,10 @@ export class AppEffects {
     ofType<SelectLocation>(LocationActionTypes.SelectLocation),
     debounceTime(debounce),
     switchMap(({ payload: { id } }) => this.api.hotels(id).pipe(
-      map(({ data: hotels, metadata }) => new LoadHotels({ hotels, metadata })),
+      mergeMap(({ data: hotels, metadata }) => [
+        new LoadHotels({ hotels, metadata }),
+        new LoadAmenities({ amenities: metadata.amenities })
+      ]),
       catchError(error => of(new ApiResponseError({ error })))
     ))
   )

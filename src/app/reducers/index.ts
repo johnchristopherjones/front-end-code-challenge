@@ -5,8 +5,10 @@ import * as fromAutofillAirports from './autofill-airport.reducer';
 import * as fromAutofillLocations from './autofill-location.reducer';
 import * as fromHotels from './hotel.reducer';
 import * as fromLocations from './location.reducer';
+import * as fromAmenities from './amenity.reducer';
 
 export interface State {
+  [fromAmenities.stateKey]: fromAmenities.State;
   [fromAutofillAirports.stateKey]: fromAutofillAirports.State;
   [fromAutofillLocations.stateKey]: fromAutofillLocations.State;
   [fromAirports.stateKey]: fromAirports.State;
@@ -15,6 +17,7 @@ export interface State {
 }
 
 export const reducers: ActionReducerMap<State> = {
+  [fromAmenities.stateKey]: fromAmenities.reducer,
   [fromAutofillAirports.stateKey]: fromAutofillAirports.reducer,
   [fromAutofillLocations.stateKey]: fromAutofillLocations.reducer,
   [fromAirports.stateKey]: fromAirports.reducer,
