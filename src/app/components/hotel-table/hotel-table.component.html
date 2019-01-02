@@ -14,12 +14,17 @@
 
     <!-- Filter Column -->
     <ng-container matColumnDef="filter">
-      <th mat-header-cell *matHeaderCellDef fxLayoutGap="16px">
+      <th mat-header-cell *matHeaderCellDef fxLayoutGap="16px" [attr.colspan]="displayedColumns.length">
         <!-- <button mat-raised-button>Any price</button> -->
         <app-amenities-menu></app-amenities-menu>
         <app-brands-menu>Any brands</app-brands-menu>
-        <!-- <span >{{ fullName$ | async }}</span> -->
       </th>
+    </ng-container>
+
+    <!-- Brand Column -->
+    <ng-container matColumnDef="brand">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Brand</th>
+      <td mat-cell *matCellDef="let row">{{ row.brand && row.brand.name }}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="filterbarColumns" class="hotel-tabel--filter-bar"></tr>
