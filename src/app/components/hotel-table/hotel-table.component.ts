@@ -19,6 +19,7 @@ export class HotelTableComponent implements OnInit {
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['name'];
+  filterbarColumns = ['filter'];
 
   constructor(private store: Store<State>) {}
 

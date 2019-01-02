@@ -1,3 +1,10 @@
+@import '~@angular/material/theming';
+
 .full-width-table {
   width: 100%;
+}
+
+.hotel-tabel--filter-bar {
+  background: map_get($mat-grey, 900);
+  color: white;
 }
