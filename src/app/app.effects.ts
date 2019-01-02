@@ -10,6 +10,7 @@ import { LoadLocations, LocationActionTypes, SearchLocations, SelectLocation } f
 import { RoomkeyApiService } from './services/roomkey-api.service';
 import { LoadAmenities } from './actions/amenity.actions';
 import { LoadBrands } from './actions/brand.actions';
+import { Router } from '@angular/router';
 
 
 @Injectable()
@@ -81,5 +82,11 @@ export class AppEffects {
     ))
   )
 
-  constructor(private actions$: Actions, private api: RoomkeyApiService) { }
+  @Effect({ dispatch: false })
+  setLocationRoute$ = () => this.actions$.pipe(
+    ofType<SelectLocation>(LocationActionTypes.SelectLocation),
+    tap(({ payload: { id }}) => this.router.navigate([ 'locations', id, 'hotels' ]))
+  )
+
+  constructor(private actions$: Actions, private api: RoomkeyApiService, private router: Router) { }
 }
