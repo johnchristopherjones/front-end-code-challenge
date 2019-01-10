@@ -44,6 +44,8 @@ import { HotelTableComponent } from './components/hotel-table/hotel-table.compon
 import { HotelGridComponent } from 'src/app/components/hotel-grid/hotel-grid.component';
 import { HotelGridCellComponent } from 'src/app/components/hotel-grid-cell/hotel-grid-cell.component';
 import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { AmenitiesIconListComponent } from './components/amenities-icon-list/amenities-icon-list.component';
+import { AmenitiesIconListItemComponent } from './components/amenities-icon-list-item/amenities-icon-list-item.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +59,8 @@ import { ScrollDispatchModule } from '@angular/cdk/scrolling';
     HotelTableComponent,
     HotelGridComponent,
     HotelGridCellComponent,
+    AmenitiesIconListComponent,
+    AmenitiesIconListItemComponent,
   ],
   imports: [
     BrowserAnimationsModule,
