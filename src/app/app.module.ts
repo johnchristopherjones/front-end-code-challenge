@@ -41,6 +41,9 @@ import { LocationDetailsComponent } from './components/location-details/location
 import { AmenitiesMenuComponent } from './components/amenities-menu/amenities-menu.component';
 import { BrandsMenuComponent } from './components/brands-menu/brands-menu.component';
 import { HotelTableComponent } from './components/hotel-table/hotel-table.component';
+import { HotelGridComponent } from 'src/app/components/hotel-grid/hotel-grid.component';
+import { HotelGridCellComponent } from 'src/app/components/hotel-grid-cell/hotel-grid-cell.component';
+import { ScrollDispatchModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -52,6 +55,8 @@ import { HotelTableComponent } from './components/hotel-table/hotel-table.compon
     AmenitiesMenuComponent,
     BrandsMenuComponent,
     HotelTableComponent,
+    HotelGridComponent,
+    HotelGridCellComponent,
   ],
   imports: [
     BrowserAnimationsModule,
@@ -78,6 +83,7 @@ import { HotelTableComponent } from './components/hotel-table/hotel-table.compon
     MatDatepickerModule,
     MatInputModule,
     MatCheckboxModule,
+    ScrollDispatchModule,
     ReactiveFormsModule,
     HttpClientModule,
     MatAutocompleteModule

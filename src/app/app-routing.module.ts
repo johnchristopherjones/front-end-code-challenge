@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { LocationPageComponent } from './components/location-page/location-page.component';
 import { LocationDetailsComponent } from './components/location-details/location-details.component';
 import { HotelTableComponent } from './components/hotel-table/hotel-table.component';
+import { HotelGridComponent } from './components/hotel-grid/hotel-grid.component';
 
 const routes: Routes = [
   {
@@ -20,7 +21,7 @@ const routes: Routes = [
         children: [
           {
             path: 'hotels',
-            component: HotelTableComponent
+            component: HotelGridComponent
           }
         ]
       }

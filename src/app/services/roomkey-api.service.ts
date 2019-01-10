@@ -35,6 +35,13 @@ const defaultHotelFields: (keyof Hotel)[] = [
   'primary_photo', 'udicode', 'user_rating', 'amenities'
 ];
 
+export const detailedHotelFields: (keyof Hotel)[] = [
+  'address', 'amenities', 'brand', 'country_code', 'description', 'group',
+  'indicative_rate', 'lat', 'lng', 'location_id', 'locations', 'name',
+  'photos', 'primary_photo', 'reservation_telephone', 'stars',
+  'tripadvisor', 'udicode', 'user_rating', 'vfm_url',
+];
+
 
 /**
  * Requests that can be made to the Roomkey API server.

@@ -1,0 +1,4 @@
+<div class="hotel-grid">
+  <app-hotel-grid-cell *ngFor="let item of dataSource.connect() | async"
+    [hotel]="item"></app-hotel-grid-cell>
+</div>
