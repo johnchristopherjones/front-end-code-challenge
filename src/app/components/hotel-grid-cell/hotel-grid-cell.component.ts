@@ -10,7 +10,11 @@ import { hotelsUri } from 'src/app/services/roomkey-api.service';
 export class HotelGridCellComponent implements OnInit {
   @Input() hotel: Hotel;
   showMore = false;
-  MAX_AMENITIES = 6;
+  MAX_AMENITIES = 2;
+
+  get isShowMoreDisabled() {
+    return this.hotel.amenities.length <= this.MAX_AMENITIES;
+  }
 
   constructor() { }
 
@@ -20,10 +24,6 @@ export class HotelGridCellComponent implements OnInit {
   primaryPhoto(primaryPhoto, size: '200x150' | '500x375' | 'big' = 'big'): string {
     // big = 800x533
     return `https://d29u3c1wxehloe.cloudfront.net${primaryPhoto.id}${size}.jpg`;
-  }
-
-  amenitiesList() {
-    return this.showMore ? this.hotel.amenities : this.hotel.amenities.slice(0, this.MAX_AMENITIES);
   }
 
   showMoreButton() {

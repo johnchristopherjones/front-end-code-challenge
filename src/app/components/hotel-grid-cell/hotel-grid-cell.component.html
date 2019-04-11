@@ -16,8 +16,8 @@
       [shorten]="showMore ? null : MAX_AMENITIES"></app-amenities-icon-list>
   </mat-card-content>
   <mat-card-actions>
-    <button *ngIf="showMoreButton()"
-      mat-button
+    <button mat-button
+      [disabled]="isShowMoreDisabled"
       (click)="showMore = !showMore">
       {{ showMoreButtonLabel() }}
     </button>
