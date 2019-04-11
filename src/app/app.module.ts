@@ -43,7 +43,7 @@ import { BrandsMenuComponent } from './components/brands-menu/brands-menu.compon
 import { HotelTableComponent } from './components/hotel-table/hotel-table.component';
 import { HotelGridComponent } from 'src/app/components/hotel-grid/hotel-grid.component';
 import { HotelGridCellComponent } from 'src/app/components/hotel-grid-cell/hotel-grid-cell.component';
-import { ScrollDispatchModule } from '@angular/cdk/scrolling';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AmenitiesIconListComponent } from './components/amenities-icon-list/amenities-icon-list.component';
 import { AmenitiesIconListItemComponent } from './components/amenities-icon-list-item/amenities-icon-list-item.component';
 
@@ -87,7 +87,7 @@ import { AmenitiesIconListItemComponent } from './components/amenities-icon-list
     MatDatepickerModule,
     MatInputModule,
     MatCheckboxModule,
-    ScrollDispatchModule,
+    ScrollingModule,
     ReactiveFormsModule,
     HttpClientModule,
     MatAutocompleteModule
