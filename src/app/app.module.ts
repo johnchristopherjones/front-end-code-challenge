@@ -29,7 +29,8 @@ import {
   MatDatepickerModule,
   MatInputModule,
   MatAutocompleteModule,
-  MatCheckboxModule
+  MatCheckboxModule,
+  MatProgressBarModule
 } from '@angular/material';
 import { LocationPageComponent } from './components/location-page/location-page.component';
 import { LocationSearchBoxComponent } from './components/location-search-box/location-search-box.component';
@@ -84,6 +85,7 @@ import { CustomSerializer } from './custom-route-serializer';
     MatGridListModule,
     MatCardModule,
     MatMenuModule,
+    MatProgressBarModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,

@@ -6,16 +6,27 @@ import { LoadAutofillAirports } from './actions/autofill-airport.actions';
 import { LoadAutofillLocations } from './actions/autofill-location.actions';
 import { ApiResponseError, CoreActionTypes } from './actions/core.actions';
 import { LoadHotels } from './actions/hotel.actions';
-import { LoadLocations, LocationActionTypes, SearchLocations, SelectLocation } from './actions/location.actions';
+import { LoadLocations, LocationActionTypes, SearchLocations, SelectLocation, SelectLocationSuccess } from './actions/location.actions';
 import { RoomkeyApiService } from './services/roomkey-api.service';
 import { LoadAmenities } from './actions/amenity.actions';
 import { LoadBrands } from './actions/brand.actions';
 import { Router } from '@angular/router';
+import { ROUTER_NAVIGATED, RouterNavigatedAction } from '@ngrx/router-store';
+import { RouterStateUrl } from './custom-route-serializer';
 
 
 @Injectable()
 export class AppEffects {
 
+  /////////////////
+  // API Effects //
+  /////////////////
+
+  /**
+   * Deal with errors from API response.
+   *
+   * Currently just log to console.
+   */
   @Effect({ dispatch: false })
   logApiResponseErrors = this.actions$.pipe(
     ofType<ApiResponseError>(CoreActionTypes.ApiResponseError),
@@ -26,7 +37,7 @@ export class AppEffects {
    * Request location autofill choices from the API server.
    */
   @Effect()
-  searchLocations$ = ({ debounce = 200 /*ms*/ } = {}) => this.actions$.pipe(
+  loadAutofillLocations$ = ({ debounce = 200 /*ms*/ } = {}) => this.actions$.pipe(
     // Listen to SearchLoaction actions
     ofType<SearchLocations>(LocationActionTypes.SearchLocations),
     // But wait until the events stop coming in for a little bit
@@ -77,16 +88,26 @@ export class AppEffects {
         new LoadHotels({ hotels, metadata }),
         new LoadAmenities({ amenities: metadata.amenities }),
         new LoadBrands({ brands: metadata.brands }),
+        new SelectLocationSuccess({ id }),
       ]),
       catchError(error => of(new ApiResponseError({ error })))
     ))
   )
 
-  @Effect({ dispatch: false })
-  setLocationRoute$ = () => this.actions$.pipe(
-    ofType<SelectLocation>(LocationActionTypes.SelectLocation),
-    tap(({ payload: { id }}) => this.router.navigate([ 'locations', id, 'hotels' ]))
-  )
+  ////////////////////
+  // Router Effects //
+  ////////////////////
+
+  /**
+   * Select location when the route includes a location id
+   */
+  @Effect()
+   locationRoute$ = () => this.actions$.pipe(
+     ofType<RouterNavigatedAction<RouterStateUrl>>(ROUTER_NAVIGATED),
+     filter(({ payload: { routerState: { params } } }) => params && params.locationId),
+     map(({ payload: { routerState: { params } } }) => params.locationId),
+     map(id => new SelectLocation({ id })),
+   )
 
   constructor(private actions$: Actions, private api: RoomkeyApiService, private router: Router) { }
 }

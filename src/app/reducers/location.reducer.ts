@@ -8,6 +8,7 @@ export interface State extends EntityState<Location> {
   selectedLocation: string;
   checkinDate: Date;
   checkoutDate: Date;
+  isLoading: boolean;
 }
 
 export const adapter: EntityAdapter<Location> = createEntityAdapter<Location>();
@@ -21,7 +22,8 @@ export const initialState: State = adapter.getInitialState({
   // additional entity state properties
   selectedLocation: null,
   checkinDate: new Date(),
-  checkoutDate: tomorrow()
+  checkoutDate: tomorrow(),
+  isLoading: false
 });
 
 export function reducer(
@@ -71,7 +73,11 @@ export function reducer(
 
     case LocationActionTypes.SelectLocation: {
       const { id: selectedLocation } = action.payload;
-      return { ...state, selectedLocation };
+      return { ...state, selectedLocation, isLoading: true };
+    }
+
+    case LocationActionTypes.SelectLocationSuccess: {
+      return { ...state, isLoading: false };
     }
 
     case LocationActionTypes.ChangeDates: {
@@ -103,3 +109,4 @@ export const getSelectedLocation = createSelector(
 );
 
 export const getCheckinoutDates = createSelector(getLocationState, ({ checkinDate, checkoutDate }) => ({ checkinDate, checkoutDate }));
+export const getLocationIsLoading = createSelector(getLocationState, ({ isLoading }) => isLoading);

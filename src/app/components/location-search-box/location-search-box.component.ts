@@ -1,23 +1,24 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { ChangeDates, SearchLocations, SelectLocation } from 'src/app/actions/location.actions';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
+import { ChangeDates, SearchLocations } from 'src/app/actions/location.actions';
 import { AutofillAirport } from 'src/app/models/autofill-airport.model';
 import { AutofillLocation } from 'src/app/models/autofill-location.model';
 import { State } from 'src/app/reducers';
 import { getAllAutofillAirports } from 'src/app/reducers/autofill-airport.reducer';
 import { getAllAutofillLocations } from 'src/app/reducers/autofill-location.reducer';
-import { getCheckinoutDates } from 'src/app/reducers/location.reducer';
+import { getCheckinoutDates, getSelectedLocation } from 'src/app/reducers/location.reducer';
 
 @Component({
   selector: 'app-location-search-box',
   templateUrl: './location-search-box.component.html',
   styleUrls: ['./location-search-box.component.scss']
 })
-export class LocationSearchBoxComponent implements OnDestroy, OnInit {
+export class LocationSearchBoxComponent implements AfterViewInit, OnDestroy, OnInit {
+  @ViewChild('[formControlName="searchTerm"]') control: HTMLInputElement;
   destroy$ = new Subject();
   locationOptions$: Observable<AutofillLocation[]>;
   airportOptions$: Observable<AutofillAirport[]>;
@@ -27,10 +28,25 @@ export class LocationSearchBoxComponent implements OnDestroy, OnInit {
     checkoutDate: null
   });
 
-  constructor(private fb: FormBuilder, private store: Store<State>, private router: Router) {}
+  constructor(private cd: ChangeDetectorRef, private fb: FormBuilder, private store: Store<State>, private router: Router) {}
+
+  ngAfterViewInit() {
+    this.searchForm.valueChanges.subscribe(value => {
+      console.log(value.searchTerm);
+    });
+  }
 
   ngOnInit() {
-    // Initialize form with initial values from store
+    this.store.pipe(
+      select(getSelectedLocation),
+      filter(x => !!x),
+      map(({ id, full_name: name, has_photo }) => ({ id, name, has_photo })),
+      tap(v => console.log(v)))
+      .subscribe(searchTerm => {
+        this.searchForm.patchValue({ searchTerm });
+      });
+
+      // Initialize form with initial values from store
     this.store.pipe(select(getCheckinoutDates), takeUntil(this.destroy$))
       .subscribe(dates => this.searchForm.patchValue(dates, { emitEvent: false }));
 
@@ -54,7 +70,7 @@ export class LocationSearchBoxComponent implements OnDestroy, OnInit {
   }
 
   selected({ option: { value: { id }}}) {
-    this.store.dispatch(new SelectLocation({ id }));
+    this.router.navigate(['locations', id, 'hotels']);
   }
 
   changeDate() {

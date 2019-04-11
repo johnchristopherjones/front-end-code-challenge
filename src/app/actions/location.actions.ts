@@ -15,6 +15,7 @@ export enum LocationActionTypes {
   ClearLocations = '[Location] Clear Locations',
   SearchLocations = '[Location] Search Locations',
   SelectLocation = '[Location] Select Location',
+  SelectLocationSuccess = '[Location] Select Location Success',
   ChangeDates = '[Location] Change Dates'
 }
 
@@ -88,6 +89,12 @@ export class SelectLocation implements Action {
   constructor(public payload: { id: string }) {}
 }
 
+export class SelectLocationSuccess implements Action {
+  readonly type = LocationActionTypes.SelectLocationSuccess;
+
+  constructor(public payload: { id: string }) {}
+}
+
 export class ChangeDates implements Action {
   readonly type = LocationActionTypes.ChangeDates;
 
@@ -107,4 +114,5 @@ export type LocationActions =
  | ClearLocations
  | SearchLocations
  | SelectLocation
+ | SelectLocationSuccess
  | ChangeDates;

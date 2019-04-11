@@ -1,1 +1,8 @@
-<router-outlet></router-outlet>
+<ng-container [ngSwitch]="isLoading$ | async">
+  <div class="progress-container" *ngSwitchCase="true">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+  <div [class.fadeout]="isLoading$ | async">
+    <router-outlet ></router-outlet>
+  </div>
+</ng-container>

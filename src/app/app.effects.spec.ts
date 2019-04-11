@@ -9,12 +9,15 @@ import { SearchLocations, LocationActions } from './actions/location.actions';
 import { LoadAutofillAirports } from './actions/autofill-airport.actions';
 import { LoadAutofillLocations } from './actions/autofill-location.actions';
 import { Observable, of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 
 describe('AppEffects', () => {
   let actions$: Observable<LocationActions>;
   let effects: AppEffects;
   let metadata: EffectsMetadata<AppEffects>;
   let api: jasmine.SpyObj<RoomkeyApiService>;
+  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -24,13 +27,15 @@ describe('AppEffects', () => {
         {
           provide: RoomkeyApiService,
           useValue: jasmine.createSpyObj('api', ['autofill'])
-        }
-      ]
+        },
+      ],
+      imports: [RouterTestingModule]
     });
 
     effects = TestBed.get(AppEffects);
     metadata = getEffectsMetadata(effects);
     api = TestBed.get(RoomkeyApiService);
+    router = TestBed.get(Router);
   });
 
   afterEach(() => {
@@ -48,11 +53,11 @@ describe('AppEffects', () => {
     // an action themselves. The later is a decent sanity check, since you might
     // disable dispatch while developing an Effect.
     it('should register searchLocation$ that dispatches an action', () => {
-      expect(metadata.searchLocations$).toEqual({ dispatch: true });
+      expect(metadata.loadAutofillLocations$).toEqual({ dispatch: true });
     });
   });
 
-  describe('searchLocations$', () => {
+  describe('loadAutofillLocations$', () => {
     // Not testing effects yet.  For a game plan, see:
     // https://github.com/ngrx/platform/blob/master/docs/effects/testing.md
     xit('should dispatch after successful API response', () => {
@@ -73,7 +78,7 @@ describe('AppEffects', () => {
         locations: completionActions[0].payload.autofillLocations
       }));
       // tslint:disable-next-line:no-shadowed-variable
-      const effects = new AppEffects(new Actions(source), api);
+      const effects = new AppEffects(new Actions(source), api, router);
       const expected = cold('--bc', { b: completionActions[0], c: completionActions[1] });
 
       // expect(api.autofill).toHaveBeenCalled();
@@ -83,7 +88,7 @@ describe('AppEffects', () => {
       // req.flush({ query: searchTerm, locations: [], airports: [] });
 
       // Finally, test that the effect results in the expected output
-      expect(effects.searchLocations$({ debounce: 1 })).toBeObservable(expected);
+      expect(effects.loadAutofillLocations$({ debounce: 1 })).toBeObservable(expected);
     });
   });
 });
