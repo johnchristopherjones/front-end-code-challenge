@@ -7,6 +7,8 @@ import * as fromHotels from './hotel.reducer';
 import * as fromLocations from './location.reducer';
 import * as fromAmenities from './amenity.reducer';
 import * as fromBrands from './brand.reducer';
+import { routerReducer, RouterReducerState } from '@ngrx/router-store';
+import { RouterStateUrl } from '../custom-route-serializer';
 
 export interface State {
   [fromAmenities.stateKey]: fromAmenities.State;
@@ -16,6 +18,7 @@ export interface State {
   [fromBrands.stateKey]: fromBrands.State;
   [fromHotels.stateKey]: fromHotels.State;
   [fromLocations.stateKey]: fromLocations.State;
+  router: RouterReducerState<RouterStateUrl>;
 }
 
 export const reducers: ActionReducerMap<State> = {
@@ -25,7 +28,8 @@ export const reducers: ActionReducerMap<State> = {
   [fromAirports.stateKey]: fromAirports.reducer,
   [fromBrands.stateKey]: fromBrands.reducer,
   [fromHotels.stateKey]: fromHotels.reducer,
-  [fromLocations.stateKey]: fromLocations.reducer
+  [fromLocations.stateKey]: fromLocations.reducer,
+  router: routerReducer
 };
 
 export const metaReducers: MetaReducer<State>[] = !environment.production ? [] : [];

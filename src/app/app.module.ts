@@ -46,6 +46,8 @@ import { HotelGridCellComponent } from 'src/app/components/hotel-grid-cell/hotel
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AmenitiesIconListComponent } from './components/amenities-icon-list/amenities-icon-list.component';
 import { AmenitiesIconListItemComponent } from './components/amenities-icon-list-item/amenities-icon-list-item.component';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { CustomSerializer } from './custom-route-serializer';
 
 @NgModule({
   declarations: [
@@ -67,6 +69,9 @@ import { AmenitiesIconListItemComponent } from './components/amenities-icon-list
     BrowserModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers, { metaReducers }),
+    StoreRouterConnectingModule.forRoot({
+      serializer: CustomSerializer
+    }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     EffectsModule.forRoot([AppEffects]),
     LayoutModule,
