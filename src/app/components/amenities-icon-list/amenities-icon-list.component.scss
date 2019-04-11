@@ -4,6 +4,7 @@
   grid-column-gap: 8px;
   grid-row-gap: 16px;
   grid-template-columns: 24px 1fr;
+  align-items: center;
 
   @media only screen and (min-device-width: 667px) {
     grid-template-columns: repeat(2, 24px 1fr);
