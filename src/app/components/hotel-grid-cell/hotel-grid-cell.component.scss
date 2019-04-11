@@ -1,0 +1,27 @@
+mat-card-title {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 12px;
+}
+
+mat-card-subtitle {
+  height: 34px;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: start;
+  align-items: center;
+}
+
+img {
+  display: grid;
+  grid-template: 1fr / 1fr;
+  object-fit: cover;
+  height: 320px;
+}
+
+mat-card-actions {
+  display: flex;
+  flex-direction: column;
+}

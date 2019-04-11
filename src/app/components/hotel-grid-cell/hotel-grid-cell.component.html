@@ -1,14 +1,25 @@
-<mat-card style="max-width: 400px;" class="mat-elevation-8">
+<mat-card class="mat-elevation-8">
   <mat-card-header>
     <mat-card-title>{{ hotel.brand?.name || hotel.name }}</mat-card-title>
     <mat-card-subtitle>{{ hotel.name }}</mat-card-subtitle>
   </mat-card-header>
-  <img mat-card-image [src]="primaryPhoto(hotel.primary_photo)" alt="photo"/>
+  <img mat-card-image
+    [src]="primaryPhoto(hotel.primary_photo)"
+    alt="photo" />
+  <mat-card-actions>
+    <button mat-raised-button
+      color="accent">BOOK IT</button>
+  </mat-card-actions>
   <mat-card-content>
     <h3>Amenities</h3>
-    <app-amenities-icon-list [amenities]="hotel.amenities"></app-amenities-icon-list>
+    <app-amenities-icon-list [amenities]="hotel.amenities"
+      [shorten]="showMore ? null : MAX_AMENITIES"></app-amenities-icon-list>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button>BOOK IT</button>
+    <button *ngIf="showMoreButton()"
+      mat-button
+      (click)="showMore = !showMore">
+      {{ showMoreButtonLabel() }}
+    </button>
   </mat-card-actions>
 </mat-card>
