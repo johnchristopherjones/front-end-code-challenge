@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Amenity } from 'src/app/models/amenity.model';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'app-amenities-icon-list',
@@ -16,7 +17,9 @@ export class AmenitiesIconListComponent {
     this._amenities = amenities.filter(a => !names.has(`Free ${a.name}`));
   }
 
+  @Input() shorten = 0;
+
   get amenities(): Amenity[] {
-    return this._amenities;
+    return this._amenities.slice(0, this.shorten || this._amenities.length);
   }
 }
