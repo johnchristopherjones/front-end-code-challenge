@@ -14,13 +14,17 @@ const routes: Routes = [
   {
     path: 'locations',
     component: LocationPageComponent,
+  },
+  {
+    path: 'locations/:locationId/hotels',
+    component: LocationPageComponent,
     children: [
       {
-        path: ':locationId',
+        path: '',
         component: LocationDetailsComponent,
         children: [
           {
-            path: 'hotels',
+            path: '',
             component: HotelGridComponent
           }
         ]
