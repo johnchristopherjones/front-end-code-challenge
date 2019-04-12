@@ -8,10 +8,6 @@ mat-card {
 }
 
 mat-card-title {
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin-top: 12px;
 }
 
@@ -27,7 +23,7 @@ img {
   display: grid;
   grid-template: 1fr / 1fr;
   object-fit: cover;
-  height: 320px;
+  height: 312px;
 }
 
 mat-card-actions {
