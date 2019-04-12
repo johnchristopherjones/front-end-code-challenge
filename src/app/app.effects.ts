@@ -2,19 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { RouterNavigatedAction, ROUTER_NAVIGATED } from '@ngrx/router-store';
 import { select, Store } from '@ngrx/store';
-import { merge, of, empty } from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  flatMap,
-  map,
-  mergeMap,
-  switchMap,
-  tap,
-  withLatestFrom
-} from 'rxjs/operators';
+import { merge, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, flatMap, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { LoadAmenities } from './actions/amenity.actions';
 import { LoadAutofillAirports } from './actions/autofill-airport.actions';
 import { LoadAutofillLocations } from './actions/autofill-location.actions';
@@ -22,12 +11,13 @@ import { LoadBrands } from './actions/brand.actions';
 import { ApiResponseError, CoreActionTypes } from './actions/core.actions';
 import { LoadHotels } from './actions/hotel.actions';
 import { LoadLocations, LocationActionTypes, SearchLocations, SelectLocation, SelectLocationSuccess } from './actions/location.actions';
+import { LoadRates } from './actions/rate.actions';
 import { RouterStateUrl } from './custom-route-serializer';
 import { State } from './reducers';
-import { getHotelState, getHotelIds } from './reducers/hotel.reducer';
-import { getHotelSearchTerms, getLocationEntities, getLocationIds, getLocationState } from './reducers/location.reducer';
+import { getHotelIds } from './reducers/hotel.reducer';
+import { getHotelSearchTerms } from './reducers/location.reducer';
 import { RoomkeyApiService } from './services/roomkey-api.service';
-import { LoadRates } from './actions/rate.actions';
+import { chunkArray } from './reducers/utilities';
 
 
 @Injectable()
@@ -80,6 +70,8 @@ export class AppEffects {
   selectLocation$ = ({ debounce = 200 /*ms*/ } = {}) => this.actions$.pipe(
     ofType<SelectLocation>(LocationActionTypes.SelectLocation),
     debounceTime(debounce),
+    // Ignore if no location has been selected
+    filter(({ payload: { id }}) => !!id),
     switchMap(({ payload: { id } }) => this.api.location(id).pipe(
       map(location => new LoadLocations({ locations: [ location ] })),
       catchError(error => of(new ApiResponseError({ error })))
@@ -98,6 +90,8 @@ export class AppEffects {
     this.store.pipe(
       select(getHotelSearchTerms),
       debounceTime(debounce),
+      // Ignore if no location is selected
+      filter(({ id }) => !!id),
       // Check for differnt terms
       distinctUntilChanged((x, y) => Object.keys(x).every(k => x[k] === y[k])),
       // Look up hotels at this location
@@ -127,13 +121,36 @@ export class AppEffects {
   getRates$ = ({ debounce = 200 /*ms*/ } = {}) =>
   this.store.pipe(
     select(getHotelIds),
+    // Ignore if no hotels have beenf ound
     filter(ids => ids.length > 0),
     withLatestFrom(this.store.pipe(select(getHotelSearchTerms))),
-    switchMap(([udicodes, { checkin, checkout, rooms, guests }]) =>
-      this.api.rates(udicodes as string[], checkin, checkout, guests, rooms).pipe(
-        map(({ data: rates }) => new LoadRates({ rates })))
-    )
-  )
+    /*
+     * Encounting a problem where the /rates endpoint seems to randomly
+     * return empty results for the same request. On the theory that it's a
+     * silent failure due to excessive udicodes, the following mergeMaps
+     * partition udicodes into smaller chunks, then send out smaller API
+     * requests concurrently.
+     *
+     * NOTE: Theory appears to be at least partly wrong.
+     *
+     * NOTE: mergeMap has weird polymorphism depending on the return type
+     * of the function you provide. Using both implementations here. In
+     * general terms, mergeMap unconditionally emits once for each item
+     * within the return value of the passed function. The return value
+     * might be an array or an observable.
+     */
+    mergeMap(([udicodes, { checkin, checkout, rooms, guests }]) => {
+      // Partition udicodes into chunks
+      const chunks = chunkArray(udicodes, 15);
+      // return API parameters by chunks of udi codes
+      return chunks.map(chunk => ({ udicodes: chunk, checkin, checkout, rooms, guests }));
+    }),
+    mergeMap(({udicodes, checkin, checkout, rooms, guests}) =>
+      this.api.rates(udicodes, checkin, checkout, guests, rooms).pipe(
+        map(({ data: rates }) => new LoadRates({ rates })),
+        catchError(error => of(new ApiResponseError({ error })))
+      )
+    ))
 
   ////////////////////
   // Router Effects //
