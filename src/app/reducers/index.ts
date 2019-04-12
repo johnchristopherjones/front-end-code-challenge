@@ -7,6 +7,7 @@ import * as fromHotels from './hotel.reducer';
 import * as fromLocations from './location.reducer';
 import * as fromAmenities from './amenity.reducer';
 import * as fromBrands from './brand.reducer';
+import * as fromRates from './rate.reducer';
 import { routerReducer, RouterReducerState } from '@ngrx/router-store';
 import { RouterStateUrl } from '../custom-route-serializer';
 
@@ -18,6 +19,7 @@ export interface State {
   [fromBrands.stateKey]: fromBrands.State;
   [fromHotels.stateKey]: fromHotels.State;
   [fromLocations.stateKey]: fromLocations.State;
+  [fromRates.stateKey]: fromRates.State;
   router: RouterReducerState<RouterStateUrl>;
 }
 
@@ -29,6 +31,7 @@ export const reducers: ActionReducerMap<State> = {
   [fromBrands.stateKey]: fromBrands.reducer,
   [fromHotels.stateKey]: fromHotels.reducer,
   [fromLocations.stateKey]: fromLocations.reducer,
+  [fromRates.stateKey]: fromRates.reducer,
   router: routerReducer
 };
 

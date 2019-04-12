@@ -57,7 +57,7 @@ export function reducer(
 
     case HotelActionTypes.LoadHotels: {
       const { metadata } = action.payload;
-      return adapter.addAll(action.payload.hotels, { ...state, metadata });
+      return adapter.addAll(action.payload.hotels, { ...adapter.removeAll(state), metadata });
     }
 
     case HotelActionTypes.ClearHotels: {

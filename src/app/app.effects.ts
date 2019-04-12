@@ -1,23 +1,37 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { merge, of } from 'rxjs';
-import { catchError, debounceTime, filter, flatMap, map, switchMap, tap, mergeMap } from 'rxjs/operators';
+import { RouterNavigatedAction, ROUTER_NAVIGATED } from '@ngrx/router-store';
+import { select, Store } from '@ngrx/store';
+import { merge, of, empty } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  flatMap,
+  map,
+  mergeMap,
+  switchMap,
+  tap,
+  withLatestFrom
+} from 'rxjs/operators';
+import { LoadAmenities } from './actions/amenity.actions';
 import { LoadAutofillAirports } from './actions/autofill-airport.actions';
 import { LoadAutofillLocations } from './actions/autofill-location.actions';
+import { LoadBrands } from './actions/brand.actions';
 import { ApiResponseError, CoreActionTypes } from './actions/core.actions';
 import { LoadHotels } from './actions/hotel.actions';
 import { LoadLocations, LocationActionTypes, SearchLocations, SelectLocation, SelectLocationSuccess } from './actions/location.actions';
-import { RoomkeyApiService } from './services/roomkey-api.service';
-import { LoadAmenities } from './actions/amenity.actions';
-import { LoadBrands } from './actions/brand.actions';
-import { Router } from '@angular/router';
-import { ROUTER_NAVIGATED, RouterNavigatedAction } from '@ngrx/router-store';
 import { RouterStateUrl } from './custom-route-serializer';
+import { State } from './reducers';
+import { getHotelState, getHotelIds } from './reducers/hotel.reducer';
+import { getHotelSearchTerms, getLocationEntities, getLocationIds, getLocationState } from './reducers/location.reducer';
+import { RoomkeyApiService } from './services/roomkey-api.service';
+import { LoadRates } from './actions/rate.actions';
 
 
 @Injectable()
 export class AppEffects {
-
   /////////////////
   // API Effects //
   /////////////////
@@ -80,18 +94,45 @@ export class AppEffects {
    * off the same action makes any error-handling logic simpler to follow.
    */
   @Effect()
-  searchHotels$ = ({ debounce = 200 /*ms*/ } = {}) => this.actions$.pipe(
-    ofType<SelectLocation>(LocationActionTypes.SelectLocation),
-    debounceTime(debounce),
-    switchMap(({ payload: { id } }) => this.api.hotels(id).pipe(
-      mergeMap(({ data: hotels, metadata }) => [
-        new LoadHotels({ hotels, metadata }),
-        new LoadAmenities({ amenities: metadata.amenities }),
-        new LoadBrands({ brands: metadata.brands }),
-        new SelectLocationSuccess({ id }),
-      ]),
-      catchError(error => of(new ApiResponseError({ error })))
-    ))
+  searchHotels$ = ({ debounce = 200 /*ms*/ } = {}) =>
+    this.store.pipe(
+      select(getHotelSearchTerms),
+      debounceTime(debounce),
+      // Check for differnt terms
+      distinctUntilChanged((x, y) => Object.keys(x).every(k => x[k] === y[k])),
+      // Look up hotels at this location
+      switchMap(({ id }) =>
+        this.api.hotels(id).pipe(
+          mergeMap(({ data: hotels, metadata }) => [
+            new LoadHotels({ hotels, metadata }),
+            new LoadAmenities({ amenities: metadata.amenities }),
+            new LoadBrands({ brands: metadata.brands }),
+            new SelectLocationSuccess({ id })
+          ]),
+          catchError(error => of(new ApiResponseError({ error })))
+        )
+      )
+    )
+
+  /**
+   * Request rates for the found hotels
+   *
+   * NOTE: We're chaining this API request directly off data that was stored
+   * by searchHotels$.  We could have chained this more directly, but this
+   * method keeps the data flow cleaner.  For example, we could trivially
+   * disable this effect or modify the selector to constrain the rates we
+   * request from the API by using a different selector.
+   */
+  @Effect()
+  getRates$ = ({ debounce = 200 /*ms*/ } = {}) =>
+  this.store.pipe(
+    select(getHotelIds),
+    filter(ids => ids.length > 0),
+    withLatestFrom(this.store.pipe(select(getHotelSearchTerms))),
+    switchMap(([udicodes, { checkin, checkout, rooms, guests }]) =>
+      this.api.rates(udicodes as string[], checkin, checkout, guests, rooms).pipe(
+        map(({ data: rates }) => new LoadRates({ rates })))
+    )
   )
 
   ////////////////////
@@ -102,12 +143,12 @@ export class AppEffects {
    * Select location when the route includes a location id
    */
   @Effect()
-   locationRoute$ = () => this.actions$.pipe(
-     ofType<RouterNavigatedAction<RouterStateUrl>>(ROUTER_NAVIGATED),
-     filter(({ payload: { routerState: { params } } }) => params && params.locationId),
-     map(({ payload: { routerState: { params } } }) => params.locationId),
-     map(id => new SelectLocation({ id })),
-   )
+  locationRoute$ = () => this.actions$.pipe(
+    ofType<RouterNavigatedAction<RouterStateUrl>>(ROUTER_NAVIGATED),
+    filter(({payload: { routerState: { params } } }) => params && params.locationId),
+    map(({payload: { routerState: { params } } }) => params.locationId),
+    map(id => new SelectLocation({ id }))
+  )
 
-  constructor(private actions$: Actions, private api: RoomkeyApiService, private router: Router) { }
+  constructor(private actions$: Actions, private api: RoomkeyApiService, private store: Store<State>) {}
 }

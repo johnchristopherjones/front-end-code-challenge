@@ -6,14 +6,16 @@ import { createFeatureSelector, createSelector } from '@ngrx/store';
 export interface State extends EntityState<Location> {
   // additional entities state properties
   selectedLocation: string;
-  checkinDate: Date;
-  checkoutDate: Date;
+  checkin: Date;
+  checkout: Date;
+  rooms: number;
+  guests: number;
   isLoading: boolean;
 }
 
 export const adapter: EntityAdapter<Location> = createEntityAdapter<Location>();
-const tomorrow = () => {
-  const next = new Date();
+
+const tomorrow = (next = new Date()) => {
   next.setDate(next.getDate() + 1);
   return next;
 };
@@ -21,8 +23,10 @@ const tomorrow = () => {
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
   selectedLocation: null,
-  checkinDate: new Date(),
-  checkoutDate: tomorrow(),
+  checkin: new Date('2019-04-26'),
+  checkout: new Date('2019-04-27'),
+  rooms: 1,
+  guests: 2,
   isLoading: false
 });
 
@@ -81,8 +85,14 @@ export function reducer(
     }
 
     case LocationActionTypes.ChangeDates: {
-      const { checkinDate, checkoutDate } = action.payload;
-      return { ...state, checkinDate, checkoutDate };
+      const { checkinDate } = action.payload;
+      let { checkoutDate } = action.payload;
+      // Always keep checkoutDate one day in advance of checkinDate
+      if (checkinDate > checkoutDate) {
+        checkoutDate = new Date(checkinDate);
+        checkoutDate.setHours(checkoutDate.getHours() + 24);
+      }
+      return { ...state, checkin: checkinDate, checkout: checkoutDate };
     }
 
     default: {
@@ -90,6 +100,15 @@ export function reducer(
     }
   }
 }
+
+/**
+ * Selectors for this entity model.
+ *
+ * Selectors are analogous to the functions you pass to re-frame subscription
+ * registration. They select some slice of the redux store. Using the helper
+ * functions `createSelector` and `createFeatureSelector`, your selectors are
+ * also memo-ized against the identities of recent arguments.
+ */
 
 export const stateKey = 'locations';
 export const getLocationState = createFeatureSelector<State>(stateKey);
@@ -108,5 +127,10 @@ export const getSelectedLocation = createSelector(
   (entities, id) => entities[id]
 );
 
-export const getCheckinoutDates = createSelector(getLocationState, ({ checkinDate, checkoutDate }) => ({ checkinDate, checkoutDate }));
+export const getCheckinoutDates = createSelector(getLocationState, ({ checkin, checkout }) => ({ checkin, checkout }));
 export const getLocationIsLoading = createSelector(getLocationState, ({ isLoading }) => isLoading);
+
+export const getHotelSearchTerms = createSelector(
+  getLocationState,
+  ({ selectedLocation, checkin, checkout, rooms, guests }) => ({ id: selectedLocation, checkin, checkout, rooms, guests })
+);
