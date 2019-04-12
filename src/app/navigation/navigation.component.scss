@@ -28,13 +28,3 @@
     margin-right: 20px;
   }
 }
-
-.header-search-bar {
-  height: 88px;
-  display: flex;
-  flex-direction: row;
-  app-location-search-box {
-    flex-basis: 100%;
-    padding-top: 26px;
-  }
-}

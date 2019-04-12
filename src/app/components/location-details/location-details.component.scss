@@ -6,3 +6,13 @@
   justify-items: center;
   align-items: start;
 }
+
+.header-search-bar {
+  height: 88px;
+  display: flex;
+  flex-direction: row;
+  app-location-search-box {
+    flex-basis: 100%;
+    padding-top: 26px;
+  }
+}
