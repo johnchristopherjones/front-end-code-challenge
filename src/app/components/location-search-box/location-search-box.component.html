@@ -1,16 +1,17 @@
-<form [formGroup]="searchForm">
+<form [formGroup]="service.searchForm">
+
   <mat-form-field appearance="fill"
     floatLabel="always">
     <input matInput
       formControlName="searchTerm"
       [matAutocomplete]="auto"
       placeholder="Enter a city, airport, or zip code">
-      <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayWith" (optionSelected)="selected($event)">
+      <mat-autocomplete #auto="matAutocomplete" [displayWith]="service.autocompletionDisplayWith" (optionSelected)="selected($event)">
         <mat-optgroup label="Locations">
-          <mat-option *ngFor="let option of locationOptions$ | async" [value]="option">{{option.name}}</mat-option>
+          <mat-option *ngFor="let option of service.locationOptions$ | async" [value]="option">{{option.name}}</mat-option>
         </mat-optgroup>
         <mat-optgroup label="Airports">
-          <mat-option *ngFor="let option of airportOptions$ | async" [value]="option">{{option.name}}</mat-option>
+          <mat-option *ngFor="let option of service.airportOptions$ | async" [value]="option">{{option.name}}</mat-option>
         </mat-optgroup>
       </mat-autocomplete>      
   </mat-form-field>
@@ -32,4 +33,5 @@
     <mat-datepicker-toggle matSuffix [for]="checkoutPicker"></mat-datepicker-toggle>
     <mat-datepicker #checkoutPicker></mat-datepicker>
   </mat-form-field>
+
 </form>
