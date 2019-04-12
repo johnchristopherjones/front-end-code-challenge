@@ -20,16 +20,19 @@ mat-toolbar {
   .mat-form-field:nth-child(3) {
     grid-area: checkout;
   }
-  
-    
+
+  padding-top: 16px;
+
   @media only screen and (min-device-width: 1023px) {
     grid-template-areas: "search search checkin checkout";
-    padding: 16px;
     grid-gap: 16px;
+    padding: 16px;
+    padding-bottom: 0;
   }
   @media only screen and (min-device-width: 1200px) {
-    padding: 24px;
     grid-gap: 24px;
+    padding: 24px;
+    padding-bottom: 0;
   }
 }
 

@@ -16,15 +16,26 @@
   z-index: 1;
 }
 
-.header-logo-bar {
+mat-toolbar {
   $logo-height: 46px;
   $padding: 8px;
-  height: $logo-height + $padding;
-  font-size: 22px;
   padding-top: $padding;
   padding-bottom: $padding;
+  display: grid;
+  grid-template-areas: "logo slogan";
+  grid-template-columns: 176px 1fr;
+  height: $logo-height + $padding * 2;
+  align-items: center;
+  a {
+    display: contents;
+    color: inherit;
+    text-decoration: inherit;
+  }
+  .slogan {
+    grid-area: slogan;
+  }
   img {
-    height: 100%;
-    margin-right: 20px;
+    grid-area: logo;
+    height: $logo-height;
   }
 }
