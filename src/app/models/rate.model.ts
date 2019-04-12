@@ -1,4 +1,17 @@
 export interface Rate {
+  amount: {
+    taxes: number[],
+    fees: number;
+    segments: {
+      start: string, // RFC3339 date
+      nights: number,
+      amount: number,
+      fees: number[],
+      taxes: {
+        amount: number[]
+      }[];
+    }[];
+  };
   booking_url: string;
   cancellation_penalties: string[];
   currency: 'USD';

@@ -1,4 +1,6 @@
 <div class="hotel-grid">
-  <app-hotel-grid-cell *ngFor="let item of dataSource.connect() | async"
-    [hotel]="item"></app-hotel-grid-cell>
+  <ng-container *ngFor="let item of dataSource.connect() | async; trackBy: trackBy">
+    <app-hotel-grid-cell [hotel]="item[0]"
+      [rate]="item[1]"></app-hotel-grid-cell>
+  </ng-container>
 </div>

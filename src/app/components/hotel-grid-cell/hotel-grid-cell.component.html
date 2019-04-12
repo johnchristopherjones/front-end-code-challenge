@@ -7,8 +7,9 @@
     [src]="primaryPhoto(hotel.primary_photo)"
     alt="photo" />
   <mat-card-actions>
-    <button mat-raised-button
-      color="accent">BOOK IT</button>
+    <a mat-raised-button
+      color="accent"
+      [href]="rate.booking_url">BOOK IT for {{ perNight() | number }} per night</a>
   </mat-card-actions>
   <mat-card-content>
     <h3>Amenities</h3>

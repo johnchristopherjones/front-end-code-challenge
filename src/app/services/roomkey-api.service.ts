@@ -12,6 +12,11 @@ import { Rate } from '../models/rate.model';
 export const AUTOFILL_URI = `${environment.API}/autofill`;
 export const locationUri = (id: string) => `${environment.API}/locations/${id}`;
 export const hotelsUri = (id: string) => `${environment.API}/locations/${id}/hotels`;
+export const photoUri = (photoId: string, size: '200x150' | '500x375' | 'big') =>
+  /* big = 800x533 */
+  `https://d29u3c1wxehloe.cloudfront.net${photoId}${size}.jpg`;
+
+
 export const RATES_URI = `${environment.API}/rates`;
 
 interface AutofillResponse {
