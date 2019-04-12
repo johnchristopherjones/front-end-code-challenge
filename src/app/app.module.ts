@@ -30,7 +30,8 @@ import {
   MatInputModule,
   MatAutocompleteModule,
   MatCheckboxModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { LocationPageComponent } from './components/location-page/location-page.component';
 import { LocationSearchBoxComponent } from './components/location-search-box/location-search-box.component';
@@ -92,6 +93,7 @@ import { LocationSearchBarComponent } from './components/location-search-bar/loc
     MatProgressBarModule,
     MatTableModule,
     MatPaginatorModule,
+    MatSnackBarModule,
     MatSortModule,
     MatFormFieldModule,
     MatNativeDateModule,
