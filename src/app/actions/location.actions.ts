@@ -98,7 +98,7 @@ export class SelectLocationSuccess implements Action {
 export class ChangeDates implements Action {
   readonly type = LocationActionTypes.ChangeDates;
 
-  constructor(public payload: { checkinDate: Date, checkoutDate: Date }) {}
+  constructor(public payload: { checkin: Date, checkout: Date }) {}
 }
 
 export type LocationActions =

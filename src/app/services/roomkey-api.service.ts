@@ -107,20 +107,18 @@ export class RoomkeyApiService {
   }
 
   /** Get hotels at location */
-  hotels(locationId: string, ...fields: (keyof Hotel)[]): Observable<HotelResponse> {
+  hotels(locationId: string, checkInDate: Date, checkOutDate: Date, ...fields: (keyof Hotel)[]): Observable<HotelResponse> {
     fields = fields.length === 0 ? defaultHotelFields : fields;
     const params = {
       'fields[]': fields,
       limit: '20',
       metadata: 'true',
       offset: '0',
-      sort: 'distance-asc'
+      sort: 'distance-asc',
+      checkIn: checkInDate.toISOString().slice(0, 10),
+      checkOut: checkOutDate.toISOString().slice(0, 10)
     };
     return this.http.get<HotelResponse>(hotelsUri(locationId), { params });
-  }
-
-  photoUrl(photoId: string, size: '200x150' | '500x375' | 'big') {
-    return `https://d29u3c1wxehloe.cloudfront.net${photoId}/${size}.jpg`;
   }
 
   /**

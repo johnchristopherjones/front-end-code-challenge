@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { distinctUntilChanged, filter, map, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, takeUntil, withLatestFrom } from 'rxjs/operators';
 import { ChangeDates, SearchLocations } from '../actions/location.actions';
 import { AutofillAirport } from '../models/autofill-airport.model';
 import { AutofillLocation } from '../models/autofill-location.model';
@@ -25,8 +25,8 @@ export class SearchFormService implements OnDestroy {
   // Public form that components can use
   searchForm = this.fb.group({
     searchTerm: '',
-    checkinDate: null,
-    checkoutDate: null
+    checkin: null,
+    checkout: null
   });
 
   constructor(private fb: FormBuilder, private router: Router, private store: Store<State>) {
@@ -51,16 +51,16 @@ export class SearchFormService implements OnDestroy {
       takeUntil(this.destroy$),
       map(({ searchTerm }) => searchTerm),
       distinctUntilChanged()
-    )
+    );
     formSearchTerm.subscribe(searchTerm => this.store.dispatch(new SearchLocations({ searchTerm })));
 
     // Subscribe to changes in reservation dates
     const formDates = this.searchForm.valueChanges.pipe(
       takeUntil(this.destroy$),
-      map(({ checkinDate, checkoutDate }) => ({ checkinDate, checkoutDate })),
+      map(({ checkin, checkout }) => ({ checkin, checkout })),
     );
-    formDates.subscribe(({ checkinDate, checkoutDate }) => {
-      this.store.dispatch(new ChangeDates({ checkinDate, checkoutDate }));
+    formDates.subscribe(({ checkin, checkout }) => {
+      this.store.dispatch(new ChangeDates({ checkin, checkout }));
     });
 
     // Subscribe to autofill options; these will change as search results come in

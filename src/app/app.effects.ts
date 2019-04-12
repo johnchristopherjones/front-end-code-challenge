@@ -101,8 +101,8 @@ export class AppEffects {
       // Check for differnt terms
       distinctUntilChanged((x, y) => Object.keys(x).every(k => x[k] === y[k])),
       // Look up hotels at this location
-      switchMap(({ id }) =>
-        this.api.hotels(id).pipe(
+      switchMap(({ id, checkin, checkout }) =>
+        this.api.hotels(id, checkin, checkout).pipe(
           mergeMap(({ data: hotels, metadata }) => [
             new LoadHotels({ hotels, metadata }),
             new LoadAmenities({ amenities: metadata.amenities }),

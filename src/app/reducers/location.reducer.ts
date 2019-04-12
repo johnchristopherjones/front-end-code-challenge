@@ -85,14 +85,15 @@ export function reducer(
     }
 
     case LocationActionTypes.ChangeDates: {
-      const { checkinDate } = action.payload;
-      let { checkoutDate } = action.payload;
+      const { checkin } = action.payload;
+      let { checkout } = action.payload;
       // Always keep checkoutDate one day in advance of checkinDate
-      if (checkinDate > checkoutDate) {
-        checkoutDate = new Date(checkinDate);
-        checkoutDate.setHours(checkoutDate.getHours() + 24);
+      const dateStrings = [checkin, checkout].map(date => date.toISOString().slice(0, 10));
+      if (dateStrings[0] >= dateStrings[1]) {
+        checkout = new Date(checkin);
+        checkout.setHours(checkout.getHours() + 24);
       }
-      return { ...state, checkin: checkinDate, checkout: checkoutDate };
+      return { ...state, checkin, checkout };
     }
 
     default: {
