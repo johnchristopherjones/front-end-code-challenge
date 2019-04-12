@@ -15,17 +15,18 @@ export interface State extends EntityState<Location> {
 
 export const adapter: EntityAdapter<Location> = createEntityAdapter<Location>();
 
-const tomorrow = (next = new Date()) => {
-  next.setDate(next.getDate() + 1);
+const daysFromNow = (days) => {
+  const next = new Date();
+  next.setDate(next.getDate() + days);
   return next;
 };
 
 export const initialState: State = adapter.getInitialState({
   // additional entity state properties
   selectedLocation: null,
-  checkin: new Date('2019-04-26'),
-  checkout: new Date('2019-04-27'),
-  rooms: 1,
+  checkin: daysFromNow(1),
+  checkout: daysFromNow(2),
+  rooms: 2,
   guests: 2,
   isLoading: false
 });
