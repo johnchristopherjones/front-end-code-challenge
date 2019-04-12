@@ -1,15 +1,12 @@
+<app-location-search-bar></app-location-search-bar>
+
 <ng-container [ngSwitch]="isLoading$ | async">
 
-  <div class="progress-container" *ngSwitchCase="true">
+  <div *ngSwitchCase="true" class="progress-container">
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
   </div>
 
-  <div [class.fadeout]="isLoading$ | async">
-
-    <mat-toolbar color="primary" class="header-search-bar">
-      <app-location-search-box></app-location-search-box>
-    </mat-toolbar>
-
+  <div *ngSwitchCase="false" class="location-details-container">
     <router-outlet></router-outlet>
   </div>
 

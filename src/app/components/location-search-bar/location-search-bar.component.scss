@@ -1,0 +1,35 @@
+$margin: 16px;
+
+mat-toolbar {
+  width: 100%;
+  height: auto;
+
+  display: grid;
+  align-items: center;
+  grid-template-areas:
+    "search"
+    "checkin"
+    "checkout";
+  
+  .mat-form-field:nth-child(1) {
+    grid-area: search;
+  }
+  .mat-form-field:nth-child(2) {
+    grid-area: checkin;
+  }
+  .mat-form-field:nth-child(2) {
+    grid-area: checkout;
+  }
+  
+    
+  @media only screen and (min-device-width: 1023px) {
+    grid-template-areas: "search search checkin checkout";
+    padding: 16px;
+    grid-gap: 16px;
+  }
+  @media only screen and (min-device-width: 1200px) {
+    padding: 24px;
+    grid-gap: 24px;
+  }
+}
+
