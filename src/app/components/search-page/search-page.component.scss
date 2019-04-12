@@ -1,11 +1,18 @@
 $margin: 16px;
 
-mat-toolbar {
-  width: 100%;
-  height: auto;
+form {
+  box-sizing: border-box;
+  position: absolute;
+  top: 54px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  padding: 16px;
+  grid-gap: 16px;
 
   display: grid;
-  align-items: center;
+  align-content: center;
   grid-template-areas:
     "search"
     "checkin"
@@ -21,15 +28,18 @@ mat-toolbar {
     grid-area: checkout;
   }
   
+  @media only screen and ( min-device-width: 667px) {
+    grid-template-areas:
+      "search  search"
+      "checkin checkout";
+    }
     
   @media only screen and (min-device-width: 1023px) {
-    grid-template-areas: "search search checkin checkout";
-    padding: 16px;
-    grid-gap: 16px;
+    justify-content: center;
   }
   @media only screen and (min-device-width: 1200px) {
-    padding: 24px;
     grid-gap: 24px;
+    padding: 24px;
   }
 }
 

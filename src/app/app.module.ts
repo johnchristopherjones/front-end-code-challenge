@@ -49,6 +49,7 @@ import { AmenitiesIconListComponent } from './components/amenities-icon-list/ame
 import { AmenitiesIconListItemComponent } from './components/amenities-icon-list-item/amenities-icon-list-item.component';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { CustomSerializer } from './custom-route-serializer';
+import { SearchPageComponent } from './components/search-page/search-page.component';
 import { LocationSearchBarComponent } from './components/location-search-bar/location-search-bar.component';
 
 @NgModule({
@@ -65,6 +66,7 @@ import { LocationSearchBarComponent } from './components/location-search-bar/loc
     HotelGridCellComponent,
     AmenitiesIconListComponent,
     AmenitiesIconListItemComponent,
+    SearchPageComponent,
     LocationSearchBarComponent,
   ],
   imports: [

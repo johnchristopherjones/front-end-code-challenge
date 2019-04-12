@@ -4,6 +4,7 @@ import { LocationPageComponent } from './components/location-page/location-page.
 import { LocationDetailsComponent } from './components/location-details/location-details.component';
 import { HotelTableComponent } from './components/hotel-table/hotel-table.component';
 import { HotelGridComponent } from './components/hotel-grid/hotel-grid.component';
+import { SearchPageComponent } from './components/search-page/search-page.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,12 @@ const routes: Routes = [
   {
     path: 'locations',
     component: LocationPageComponent,
+    children: [
+      {
+        path: '',
+        component: SearchPageComponent
+      }
+    ]
   },
   {
     path: 'locations/:locationId/hotels',
